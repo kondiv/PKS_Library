@@ -23,50 +23,63 @@ namespace PKS_Library.Repositories.Realisations
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteBookAsync(int id)
+        public async Task DeleteBookAsync(Book book)
         {
-            var book = await GetBookById(id);
-            if (book != null)
-            {
-                _dbContext.Remove<Book>(book);
-                await _dbContext.SaveChangesAsync();
-            }
+            _dbContext.Books.Remove(book);
+            await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Book>> GetAllBooks()
+        public async Task<IEnumerable<Book>> GetAllBooksAsync()
         {
-            return await _dbContext.Books.ToListAsync();
+            return await _dbContext.Books.AsNoTracking().ToListAsync();
         }
 
-        public async Task<Book?> GetBookById(int id)
+        public async Task<Book?> GetBookByIdAsync(int id)
         {
             return await _dbContext.Books.FindAsync(id);
         }
 
-        public async Task<IEnumerable<Book>> GetBooksByAuthor(Author author)
+        public async Task<Book?> GetBookByIsbnAsync(string isbn)
+        {
+            return await _dbContext.Books.AsNoTracking()
+                                         .FirstOrDefaultAsync(b => b.Isbn == isbn);
+        }
+
+        public async Task<IEnumerable<Book>> GetBooksByAuthorAsync(Author author)
         {
             return await _dbContext.Books
                 .Where(book => book.AuthorId == author.AuthorId)
+                .AsNoTracking()
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Book>> GetBooksByGenre(Genre genre)
+        public async Task<IEnumerable<Book>> GetBooksByGenreAsync(Genre genre)
         {
             return await _dbContext.Books
                 .Where(book => book.GenreId == genre.GenreId)
+                .AsNoTracking()
                 .ToListAsync();
         }
 
         public async Task UpdateBookAsync(Book book)
         {
-            await _dbContext.Books.ExecuteUpdateAsync(b => b.SetProperty(b => b.Isbn, book.Isbn)
-                                                            .SetProperty(b => b.QuantityInStock, book.QuantityInStock)
-                                                            .SetProperty(b => b.Author, book.Author)
-                                                            .SetProperty(b => b.PublishYear, book.PublishYear)
-                                                            .SetProperty(b => b.AuthorId, book.AuthorId)
-                                                            .SetProperty(b => b.Genre, book.Genre)
-                                                            .SetProperty(b => b.GenreId, book.GenreId));
-            await _dbContext.SaveChangesAsync();
+            if (book == null)
+            {
+                throw new ArgumentNullException(nameof(book), "Book cannot be null");
+            }
+
+            var existingBook = await GetBookByIdAsync(book.BookId) ?? throw new KeyNotFoundException($"Book with ID {book.BookId} not found");
+
+            try
+            {
+                _dbContext.Entry(existingBook).CurrentValues.SetValues(book);
+                await _dbContext.SaveChangesAsync();
+            }
+
+            catch (DbUpdateException ex)
+            {
+                throw new Exception("An error occurred while updating the book", ex);
+            }
         }
     }
 }

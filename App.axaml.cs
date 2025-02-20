@@ -1,9 +1,15 @@
+using System;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
+using Microsoft.Extensions.DependencyInjection;
+using PKS_Library.Data;
+using PKS_Library.Models;
+using PKS_Library.Repositories.Interfaces;
+using PKS_Library.Repositories.Realisations;
 using PKS_Library.ViewModels;
 using PKS_Library.Views;
 
@@ -18,10 +24,23 @@ namespace PKS_Library
 
         public override void OnFrameworkInitializationCompleted()
         {
+            var collection = new ServiceCollection();
+
+            collection.AddDbContext<PksBooksContext>();
+
+            collection.AddSingleton<MainWindowViewModel>()
+                      .AddSingleton<IBookRepository, BookRepository>()
+                      .AddTransient<AllBooksViewModel>()
+                      .AddSingleton<Func<PageName, PageViewModel>>(x => name => name switch
+                      {
+                          PageName.Books => x.GetRequiredService<AllBooksViewModel>(),
+                          _ => throw new NotImplementedException()
+                      });
+
+            var services = collection.BuildServiceProvider();
+
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
-                // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
                 DisableAvaloniaDataAnnotationValidation();
                 desktop.MainWindow = new MainWindow
                 {

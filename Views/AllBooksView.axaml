@@ -2,11 +2,24 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="PKS_Library.Views.AllBooksView">
-	<Panel>
-		<ItemsControl>
-			
+             xmlns:vm="clr-namespace:PKS_Library.ViewModels;assembly=PKS_Library"
+			 xmlns:models="clr-namespace:PKS_Library.Models;assembly=PKS_Library"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="PKS_Library.Views.AllBooksView"
+			 x:DataType="vm:AllBooksViewModel">
+	<ScrollViewer>
+		<ItemsControl ItemsSource="{Binding Books}">
+			<ItemsControl.ItemTemplate>
+				<DataTemplate DataType="models:Book">
+					<Grid ColumnDefinitions="30*, 20*, 15*, 15* *">
+						<TextBlock Text="{Binding Title}"></TextBlock>
+						<TextBlock Text="{Binding Author.LastName}"></TextBlock>
+						<TextBlock Text="{Binding Genre.Name}"></TextBlock>
+						<Button Content="Редактировать"></Button>
+						<Button Content="{StaticResource DeleteIconData}"></Button>
+					</Grid>
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
 		</ItemsControl>
-	</Panel>
+	</ScrollViewer>
 </UserControl>
