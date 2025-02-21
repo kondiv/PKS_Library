@@ -45,41 +45,10 @@ namespace PKS_Library.Repositories.Realisations
                                          .FirstOrDefaultAsync(b => b.Isbn == isbn);
         }
 
-        public async Task<IEnumerable<Book>> GetBooksByAuthorAsync(Author author)
-        {
-            return await _dbContext.Books
-                .Where(book => book.AuthorId == author.AuthorId)
-                .AsNoTracking()
-                .ToListAsync();
-        }
-
-        public async Task<IEnumerable<Book>> GetBooksByGenreAsync(Genre genre)
-        {
-            return await _dbContext.Books
-                .Where(book => book.GenreId == genre.GenreId)
-                .AsNoTracking()
-                .ToListAsync();
-        }
-
         public async Task UpdateBookAsync(Book book)
         {
-            if (book == null)
-            {
-                throw new ArgumentNullException(nameof(book), "Book cannot be null");
-            }
-
-            var existingBook = await GetBookByIdAsync(book.BookId) ?? throw new KeyNotFoundException($"Book with ID {book.BookId} not found");
-
-            try
-            {
-                _dbContext.Entry(existingBook).CurrentValues.SetValues(book);
-                await _dbContext.SaveChangesAsync();
-            }
-
-            catch (DbUpdateException ex)
-            {
-                throw new Exception("An error occurred while updating the book", ex);
-            }
+            _dbContext.Books.Update(book);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

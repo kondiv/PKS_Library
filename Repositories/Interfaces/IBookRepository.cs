@@ -8,8 +8,6 @@ namespace PKS_Library.Repositories.Interfaces
     public interface IBookRepository
     {
         public Task<IEnumerable<Book>> GetAllBooksAsync();
-        public Task<IEnumerable<Book>> GetBooksByAuthorAsync(Author author);
-        public Task<IEnumerable<Book>> GetBooksByGenreAsync(Genre genre);
         public Task<Book?> GetBookByIdAsync(int id);
         public Task<Book?> GetBookByIsbnAsync(string isbn);
         public Task CreateBookAsync(Book book);
