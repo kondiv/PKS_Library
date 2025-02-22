@@ -1,4 +1,5 @@
-﻿using PKS_Library.Models;
+﻿using PKS_Library.CustomExceptions;
+using PKS_Library.Models;
 using PKS_Library.Repositories.Interfaces;
 using PKS_Library.Services.Interfaces;
 using System;
@@ -20,19 +21,19 @@ namespace PKS_Library.Services.Realisations
 
         public async Task AddBookAsync(Book book)
         {
-            var existingBook = (await _bookRepository.GetAllBooksAsync()).FirstOrDefault(b => b.Isbn == book.Isbn);
+            var existingBook = await _bookRepository.GetBookByIsbnAsync(book.Isbn);
 
             if (existingBook != null)
-                throw new InvalidOperationException("Книга уже существует.");
+                throw new AlreadyExistsException("Книга уже существует.");
 
             await _bookRepository.CreateBookAsync(book);
         }
 
-        public async Task DeleteBookAsync(Book book)
+        public async Task DeleteBookAsync(int id)
         {
-            _ = await _bookRepository.GetBookByIsbnAsync(book.Isbn) ?? throw new InvalidOperationException("Книги не существует");
+            _ = await _bookRepository.GetBookByIdAsync(id) ?? throw new NotFoundException("Книги не существует");
 
-            await _bookRepository.DeleteBookAsync(book);
+            await _bookRepository.DeleteBookAsync(id);
         }
 
         public async Task<IEnumerable<Book>> GetAllBooksAsync()
@@ -42,7 +43,7 @@ namespace PKS_Library.Services.Realisations
 
         public async Task<Book> GetBookByIdAsync(int id)
         {
-            return await _bookRepository.GetBookByIdAsync(id) ?? throw new InvalidOperationException("Книги не существует");
+            return await _bookRepository.GetBookByIdAsync(id) ?? throw new NotFoundException("Книги не существует");
         }
 
         public async Task UpdateBookAsync(Book book)

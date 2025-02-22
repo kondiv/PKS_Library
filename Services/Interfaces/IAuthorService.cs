@@ -13,12 +13,14 @@ namespace PKS_Library.Services.Interfaces
 
         Task<Author> GetAuthorByLastNameAsync(string lastName);
 
+        Task<Author> GetAuthorByFirstAndLastNameAsync(string firstName, string lastName);
+
         Task<Author> GetAuthorByIdAsync(int id);
 
         Task CreateAuthorAsync(Author author);
 
         Task UpdateAuthorAsync(Author author);
 
-        Task DeleteAuthorAsync(Author author);
+        Task DeleteAuthorAsync(int id);
     }
 }

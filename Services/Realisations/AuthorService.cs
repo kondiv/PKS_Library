@@ -1,4 +1,5 @@
-﻿using PKS_Library.Models;
+﻿using PKS_Library.CustomExceptions;
+using PKS_Library.Models;
 using PKS_Library.Repositories.Interfaces;
 using PKS_Library.Services.Interfaces;
 using System;
@@ -21,38 +22,69 @@ namespace PKS_Library.Services.Realisations
         public async Task CreateAuthorAsync(Author author)
         {
             ArgumentNullException.ThrowIfNull(author);
-            try
+
+            var existingAuthor =  await _repository.GetAuthorByFirstAndLastNameAsync(author.FirstName, author.LastName);
+
+            if(existingAuthor != null && existingAuthor.Birthdate == author.Birthdate && existingAuthor.Country == author.Country)
             {
-                var existingAuthor = _repository.GetAuthorByFirstAndLastNameAsync(author.FirstName, author.LastName);
-            }
-            catch (Exception)
-            {
-                await _repository.CreateAuthorAsync(author);
-            }
+                throw new AlreadyExistsException("Данный автор уже существует");
+            }    
+
+            await _repository.CreateAuthorAsync(author);
+
         }
 
-        public Task DeleteAuthorAsync(Author author)
+        public async Task DeleteAuthorAsync(int id)
         {
+            var author = await _repository.GetAuthorByIdAsync(id) ?? throw new NotFoundException("Данного автора не существует");
+
+            await _repository.DeleteAuthorAsync(id);
         }
 
-        public Task<IEnumerable<Author>> GetAllAuthorsAsync()
+        public async Task<IEnumerable<Author>> GetAllAuthorsAsync()
         {
-            throw new NotImplementedException();
+            return await _repository.GetAllAuthorsAsync();
         }
 
-        public Task<Author> GetAuthorByIdAsync(int id)
+        public async Task<Author> GetAuthorByFirstAndLastNameAsync(string firstName, string lastName)
         {
-            throw new NotImplementedException();
+            if (String.IsNullOrEmpty(firstName) || String.IsNullOrEmpty(lastName))
+                throw new WrongArgumentProvidedException("Поля имя и фамилия не могут быть пустыми");
+
+            var author = await _repository.GetAuthorByFirstAndLastNameAsync(firstName, lastName) ?? 
+                throw new NotFoundException("Автор с данными именем и фамилией не найден");
+
+            return author;
         }
 
-        public Task<Author> GetAuthorByLastNameAsync(string lastName)
+        public async Task<Author> GetAuthorByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            if (id < 0)
+                throw new WrongArgumentProvidedException("Поле ID не может быть отрицательным или ровняться 0");
+
+            var author = await _repository.GetAuthorByIdAsync(id) ??
+                throw new NotFoundException($"Автор с ID {id} не найден");
+
+            return author;
         }
 
-        public Task UpdateAuthorAsync(Author author)
+        public async Task<Author> GetAuthorByLastNameAsync(string lastName)
         {
-            throw new NotImplementedException();
+            if (String.IsNullOrEmpty(lastName))
+                throw new WrongArgumentProvidedException("Поле фамилия не может быть пустой");
+
+            var author = await _repository.GetAuthorByLastNameAsync(lastName) ??
+                throw new NotFoundException($"Автора с фамилией {lastName} не существует");
+
+            return author;
+        }
+
+        public async Task UpdateAuthorAsync(Author author)
+        {
+            if (author == null)
+                throw new WrongArgumentProvidedException("Аргумент не должен быть null");
+
+            await _repository.UpdateAuthorAsync(author);
         }
     }
 }

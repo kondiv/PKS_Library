@@ -13,25 +13,34 @@ namespace PKS_Library.Repositories.Realisations
     public class BookRepository : IBookRepository
     {
         private readonly PksBooksContext _dbContext;
+
         public BookRepository(PksBooksContext dbContext)
         {
             _dbContext = dbContext;
         }
+
         public async Task CreateBookAsync(Book book)
         {
             await _dbContext.AddAsync(book);
+
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteBookAsync(Book book)
+        public async Task DeleteBookAsync(int id)
         {
-            _dbContext.Books.Remove(book);
-            await _dbContext.SaveChangesAsync();
+            var book = await GetBookByIdAsync(id);
+
+            if(book != null)
+            {
+                _dbContext.Books.Remove(book);
+
+                await _dbContext.SaveChangesAsync();
+            }
         }
 
         public async Task<IEnumerable<Book>> GetAllBooksAsync()
         {
-            return await _dbContext.Books.AsNoTracking().ToListAsync();
+            return await _dbContext.Books.ToListAsync();
         }
 
         public async Task<Book?> GetBookByIdAsync(int id)
@@ -41,13 +50,13 @@ namespace PKS_Library.Repositories.Realisations
 
         public async Task<Book?> GetBookByIsbnAsync(string isbn)
         {
-            return await _dbContext.Books.AsNoTracking()
-                                         .FirstOrDefaultAsync(b => b.Isbn == isbn);
+            return await _dbContext.Books.FirstOrDefaultAsync(b => b.Isbn == isbn);
         }
 
         public async Task UpdateBookAsync(Book book)
         {
             _dbContext.Books.Update(book);
+
             await _dbContext.SaveChangesAsync();
         }
     }

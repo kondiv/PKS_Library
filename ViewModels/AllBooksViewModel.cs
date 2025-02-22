@@ -1,4 +1,7 @@
-﻿using PKS_Library.Models;
+﻿using Avalonia.Metadata;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using PKS_Library.Models;
 using PKS_Library.Repositories.Interfaces;
 using PKS_Library.Services.Interfaces;
 using System;
@@ -14,20 +17,33 @@ namespace PKS_Library.ViewModels
     {
         private readonly IBookService _bookService;
 
+        private const int PageSize = 10;
+
+        [ObservableProperty]
+        private int _currentPage = 1;
+
+        [ObservableProperty]
+        private int _totalPages = 1;
+
         public ObservableCollection<Book> Books { get; private set; } = [];
 
         public AllBooksViewModel(IBookService bookService)
         {
             PageName = Data.PageName.Books;
             _bookService = bookService;
-            LoadDataAsync().ConfigureAwait(false);
+            LoadBooksAsync().ConfigureAwait(false);
         }
 
-        private async Task LoadDataAsync()
+        [RelayCommand]
+        private async Task LoadBooksAsync()
         {
-            var books = await _bookService.GetAllBooksAsync();
+            var allBooks = await _bookService.GetAllBooksAsync();
 
-            foreach (var book in books)
+            TotalPages = allBooks.Count() / PageSize;
+
+            var 
+
+            foreach (var book in allBooks)
             {
                 Books.Add(book);
             }

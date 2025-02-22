@@ -17,6 +17,6 @@ namespace PKS_Library.Services.Interfaces
 
         public Task UpdateBookAsync(Book book);
 
-        public Task DeleteBookAsync(Book book);
+        public Task DeleteBookAsync(int id);
     }
 }

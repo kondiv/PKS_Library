@@ -9,18 +9,18 @@ namespace PKS_Library.Repositories.Interfaces
 {
     public interface IAuthorRepository
     {
-        public Task<IEnumerable<Author>> GetAllAuthorsAsync();
+        Task<IEnumerable<Author>> GetAllAuthorsAsync();
 
-        public Task<Author> GetAuthorByIdAsync(int id);
+        Task<Author?> GetAuthorByIdAsync(int id);
 
-        public Task<Author> GetAuthorByLastNameAsync(string lastName);
+        Task<Author?> GetAuthorByLastNameAsync(string lastName);
 
-        Task<Author> GetAuthorByFirstAndLastNameAsync(string firstName, string lastName);
+        Task<Author?> GetAuthorByFirstAndLastNameAsync(string firstName, string lastName);
 
-        public Task CreateAuthorAsync(Author author);
+        Task CreateAuthorAsync(Author author);
 
-        public Task UpdateAuthorAsync(Author author);
+        Task UpdateAuthorAsync(Author author);
 
-        public Task DeleteAuthorAsync(Author author);
+        Task DeleteAuthorAsync(int id);
     }
 }

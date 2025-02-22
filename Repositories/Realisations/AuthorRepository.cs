@@ -24,10 +24,17 @@ namespace PKS_Library.Repositories.Realisations
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteAuthorAsync(Author author)
+        public async Task DeleteAuthorAsync(int id)
         {
-            _dbContext.Authors.Remove(author);
-            await _dbContext.SaveChangesAsync();
+            var author = await GetAuthorByIdAsync(id);
+
+            if (author != null)
+            {
+
+                _dbContext.Authors.Remove(author);
+
+                await _dbContext.SaveChangesAsync();
+            }
         }
 
         public async Task<IEnumerable<Author>> GetAllAuthorsAsync()
@@ -35,20 +42,19 @@ namespace PKS_Library.Repositories.Realisations
             return await _dbContext.Authors.ToListAsync();
         }
 
-        public async Task<Author> GetAuthorByFirstAndLastNameAsync(string firstName, string lastName)
+        public async Task<Author?> GetAuthorByFirstAndLastNameAsync(string firstName, string lastName)
         {
-            return await _dbContext.Authors.FirstOrDefaultAsync(a => a.FirstName == firstName && a.LastName == lastName)
-                ?? throw new KeyNotFoundException();
+            return await _dbContext.Authors.FirstOrDefaultAsync(a => a.FirstName == firstName && a.LastName == lastName);
         }
 
-        public async Task<Author> GetAuthorByIdAsync(int id)
+        public async Task<Author?> GetAuthorByIdAsync(int id)
         {
-            return await _dbContext.Authors.FindAsync(id) ?? throw new KeyNotFoundException();
+            return await _dbContext.Authors.FindAsync(id);
         }
 
-        public async Task<Author> GetAuthorByLastNameAsync(string lastName)
+        public async Task<Author?> GetAuthorByLastNameAsync(string lastName)
         {
-            return await _dbContext.Authors.FirstOrDefaultAsync(a => a.LastName == lastName) ?? throw new KeyNotFoundException();
+            return await _dbContext.Authors.FirstOrDefaultAsync(a => a.LastName == lastName);
         }
 
         public async Task UpdateAuthorAsync(Author author)
