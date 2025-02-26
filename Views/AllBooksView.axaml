@@ -7,19 +7,35 @@
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="PKS_Library.Views.AllBooksView"
 			 x:DataType="vm:AllBooksViewModel">
-	<ScrollViewer>
-		<ItemsControl ItemsSource="{Binding Books}">
-			<ItemsControl.ItemTemplate>
-				<DataTemplate DataType="models:Book">
-					<Grid ColumnDefinitions="30*, 20*, 15*, 15* *">
-						<TextBlock Text="{Binding Title}"></TextBlock>
-						<TextBlock Text="{Binding Author.LastName}"></TextBlock>
-						<TextBlock Text="{Binding Genre.Name}"></TextBlock>
-						<Button Content="Редактировать"></Button>
-						<Button Content="{StaticResource DeleteIconData}"></Button>
-					</Grid>
-				</DataTemplate>
-			</ItemsControl.ItemTemplate>
-		</ItemsControl>
-	</ScrollViewer>
+	
+	<DockPanel>
+		<StackPanel>
+			<Grid Margin="0" Background="LightGray" ColumnDefinitions="220, 100, 180, 50, 125, 75">
+				<TextBlock Text="Название" Grid.Column="0" FontWeight="Bold" Margin="10, 0"/>
+				<TextBlock Text="Автор" Grid.Column="1" FontWeight="Bold" Margin="10, 0"/>
+				<TextBlock Text="Жанр" Grid.Column="2" FontWeight="Bold" Margin="10, 0"/>
+				<TextBlock Text="Кол-во" Grid.Column="3" FontWeight="Bold" Margin="10, 0"/>
+			</Grid>
+			<ListBox ItemsSource="{Binding Books}">
+				<ListBox.ItemTemplate>
+					<DataTemplate>
+						<Grid ColumnDefinitions="220, 100, 180, 50, 100, 100"
+							  Margin="0">
+							<TextBlock Text="{Binding Title}" Grid.Column="0"/>
+							<TextBlock Text="{Binding Author.ShortName}" Grid.Column="1"/>
+							<TextBlock Text="{Binding Genre}" Grid.Column="2"/>
+							<TextBlock Text="{Binding QuantityInStock}" Grid.Column="3"/>
+							<Button Grid.Column="4"
+									Content="Редактировать"
+									Command="{Binding $parent[ListBox].((vm:AllBooksViewModel)DataContext).OpenEditBookPageCommand}"
+									CommandParameter="{Binding .}"></Button>
+							<Button Grid.Column="5"
+									Content="Удалить"></Button>
+						</Grid>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+			</ListBox>
+		</StackPanel>
+	</DockPanel>
+	
 </UserControl>

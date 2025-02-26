@@ -21,10 +21,17 @@
 	    <TextBlock Grid.Row="0"
 			       Text="Библиотека"
 			       FontWeight="ExtraBold"
-			       FontSize="40"
 				   TextAlignment="Center"/>
-		<ContentControl Grid.Row="1" Width="600" Height="370">
-			<Border Background="Red"></Border>
-		</ContentControl>
+		<StackPanel Orientation="Vertical" Grid.Row="1">
+			<StackPanel Orientation="Horizontal" Margin="25, 0, 0, 0">
+				<Button Content="Книги" Command="{Binding GoToBooksPageCommand}"></Button>
+				<Button Content="Авторы" Command="{Binding GoToAuthorsPageCommand}"></Button>
+				<Button Content="Жанры" Command="{Binding GoToGenresPageCommand}"></Button>
+			</StackPanel>
+			<Border BorderBrush="Black" BorderThickness="1" Width="750" Height="400">
+				<ContentControl Content="{Binding NavigationService.CurrentPage}">
+				</ContentControl>
+			</Border>
+		</StackPanel>
 	</Grid>
 </Window>

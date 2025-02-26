@@ -60,7 +60,7 @@ public partial class PksBooksContext : DbContext
             entity.Property(e => e.AuthorId).HasColumnName("author_id");
             entity.Property(e => e.GenreId).HasColumnName("genre_id");
             entity.Property(e => e.Isbn)
-                .HasMaxLength(25)
+                .HasMaxLength(20)
                 .HasColumnName("isbn");
             entity.Property(e => e.PublishYear).HasColumnName("publish_year");
             entity.Property(e => e.QuantityInStock).HasColumnName("quantity_in_stock");
@@ -70,10 +70,12 @@ public partial class PksBooksContext : DbContext
 
             entity.HasOne(d => d.Author).WithMany(p => p.Books)
                 .HasForeignKey(d => d.AuthorId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("book_author_fk");
 
             entity.HasOne(d => d.Genre).WithMany(p => p.Books)
                 .HasForeignKey(d => d.GenreId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("book_genre_fk");
         });
 

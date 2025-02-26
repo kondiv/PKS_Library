@@ -12,6 +12,8 @@ namespace PKS_Library.Data
         Books,
         Authors,
         Genres,
-        Edit
+        BookEdit,
+        AuthorEdit,
+        GenreEdit
     }
 }

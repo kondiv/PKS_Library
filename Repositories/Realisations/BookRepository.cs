@@ -40,7 +40,10 @@ namespace PKS_Library.Repositories.Realisations
 
         public async Task<IEnumerable<Book>> GetAllBooksAsync()
         {
-            return await _dbContext.Books.ToListAsync();
+            return await _dbContext.Books
+                                    .Include(b => b.Author)
+                                    .Include(b => b.Genre)
+                                    .ToListAsync();
         }
 
         public async Task<Book?> GetBookByIdAsync(int id)

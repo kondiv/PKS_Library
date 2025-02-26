@@ -1,9 +1,12 @@
 ﻿using Avalonia.Metadata;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using PKS_Library.CustomExceptions;
+using PKS_Library.Factories;
 using PKS_Library.Models;
 using PKS_Library.Repositories.Interfaces;
 using PKS_Library.Services.Interfaces;
+using PKS_Library.Services.Realisations;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,23 +18,23 @@ namespace PKS_Library.ViewModels
 {
     public partial class AllBooksViewModel : PageViewModel
     {
+        private NavigationService _navigationService;
+
+        private readonly PageViewModelFactory _pageFactory;
+
         private readonly IBookService _bookService;
-
-        private const int PageSize = 10;
-
-        [ObservableProperty]
-        private int _currentPage = 1;
-
-        [ObservableProperty]
-        private int _totalPages = 1;
 
         public ObservableCollection<Book> Books { get; private set; } = [];
 
-        public AllBooksViewModel(IBookService bookService)
+        public AllBooksViewModel(IBookService bookService, PageViewModelFactory pageFactory, NavigationService navigationService)
         {
             PageName = Data.PageName.Books;
-            _bookService = bookService;
-            LoadBooksAsync().ConfigureAwait(false);
+
+            _bookService       = bookService;
+            _pageFactory       = pageFactory;
+            _navigationService = navigationService;
+
+           LoadBooksAsync().ConfigureAwait(false);
         }
 
         [RelayCommand]
@@ -39,14 +42,21 @@ namespace PKS_Library.ViewModels
         {
             var allBooks = await _bookService.GetAllBooksAsync();
 
-            TotalPages = allBooks.Count() / PageSize;
-
-            var 
-
             foreach (var book in allBooks)
             {
                 Books.Add(book);
             }
+        }
+
+        [RelayCommand]
+        public void OpenEditBookPage(Book book)
+        {
+            var editPage = _pageFactory.GetPageViewModel(Data.PageName.BookEdit) as BookEditViewModel ?? 
+                throw new PageDoesNotExistException("Не удалось открыть страницу редактирования книги");
+
+            editPage.SetBook(book);
+
+            _navigationService.NavigateTo(editPage);
         }
     }
 }

@@ -7,9 +7,12 @@ using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
 using PKS_Library.Data;
+using PKS_Library.Factories;
 using PKS_Library.Models;
 using PKS_Library.Repositories.Interfaces;
 using PKS_Library.Repositories.Realisations;
+using PKS_Library.Services.Interfaces;
+using PKS_Library.Services.Realisations;
 using PKS_Library.ViewModels;
 using PKS_Library.Views;
 
@@ -29,13 +32,27 @@ namespace PKS_Library
             collection.AddDbContext<PksBooksContext>();
 
             collection.AddSingleton<MainWindowViewModel>()
+                      .AddSingleton<NavigationService>()
                       .AddSingleton<IBookRepository, BookRepository>()
+                      .AddSingleton<IAuthorRepository, AuthorRepository>()
+                      .AddSingleton<IGenreRepository, GenreRepository>()
+                      .AddSingleton<IBookService, BookService>()
+                      .AddSingleton<IAuthorService, AuthorService>()
+                      .AddSingleton<IGenreService, GenreService>()
                       .AddTransient<AllBooksViewModel>()
+                      .AddTransient<BookEditViewModel>()
+                      .AddSingleton<AllBooksView>()
+                      .AddTransient<AllAuthorsViewModel>()
+                      .AddTransient<AllGenresViewModel>()
                       .AddSingleton<Func<PageName, PageViewModel>>(x => name => name switch
                       {
-                          PageName.Books => x.GetRequiredService<AllBooksViewModel>(),
+                          PageName.Books    => x.GetRequiredService<AllBooksViewModel>(),
+                          PageName.BookEdit => x.GetRequiredService<BookEditViewModel>(),
+                          PageName.Authors  => x.GetRequiredService<AllAuthorsViewModel>(),
+                          PageName.Genres   => x.GetRequiredService<AllGenresViewModel>(),
                           _ => throw new NotImplementedException()
-                      });
+                      })
+                      .AddSingleton<PageViewModelFactory>();
 
             var services = collection.BuildServiceProvider();
 
@@ -44,7 +61,7 @@ namespace PKS_Library
                 DisableAvaloniaDataAnnotationValidation();
                 desktop.MainWindow = new MainWindow
                 {
-                    DataContext = new MainWindowViewModel(),
+                    DataContext = services.GetRequiredService<MainWindowViewModel>(),
                 };
             }
 

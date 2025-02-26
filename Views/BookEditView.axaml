@@ -1,0 +1,46 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:vm="clr-namespace:PKS_Library.ViewModels;assembly=PKS_Library"
+             mc:Ignorable="d" d:DesignWidth="750" d:DesignHeight="400"
+             x:Class="PKS_Library.Views.BookEditView"
+			 x:DataType="vm:BookEditViewModel">
+	<Grid RowDefinitions="40, 10, 40, 10, 40, 10, 40, 10, 40, 10, 40, 20, 40" ColumnDefinitions="*, Auto"
+		  Margin="10" >
+		<TextBlock Grid.Row="0" Grid.Column="0" Text="Название книги" VerticalAlignment="Center"></TextBlock>
+		<TextBox Grid.Row="0" Grid.Column="1" Width="560" Text="{Binding Title, Mode=TwoWay}"></TextBox>
+		
+		<TextBlock Grid.Row="2" Grid.Column="0" Text="Автор" VerticalAlignment="Center"></TextBlock>
+		<AutoCompleteBox Grid.Row="2" Grid.Column="1"
+						 IsTextCompletionEnabled="True"
+						 FilterMode="None"
+						 MinimumPrefixLength="1"
+						 ItemsSource="{Binding FilteredAuthors}"
+						 Text="{Binding BookAuthor, Mode=TwoWay}"></AutoCompleteBox>
+		
+		<TextBlock Grid.Row="4" Grid.Column="0" Text="Жанр" VerticalAlignment="Center"></TextBlock>
+		<AutoCompleteBox Grid.Row="4" Grid.Column="1"
+						 IsTextCompletionEnabled="True"
+						 FilterMode="None"
+						 MinimumPrefixLength="1"
+						 ItemsSource="{Binding FilteredGenres}"
+						 Text="{Binding Genre, Mode=TwoWay}"></AutoCompleteBox>
+		
+		<TextBlock Grid.Row="6" Grid.Column="0" Text="ISBN" VerticalAlignment="Center"></TextBlock>
+		<TextBox Grid.Row="6" Grid.Column="1" Text="{Binding ISBN, Mode=TwoWay}"></TextBox>
+		
+		<TextBlock Grid.Row="8" Grid.Column="0" Text="Год издательства" VerticalAlignment="Center"></TextBlock>
+		<TextBox Grid.Row="8" Grid.Column="1" Text="{Binding PublishYear, Mode=TwoWay}"></TextBox>
+		
+		<TextBlock Grid.Row="10" Grid.Column="0" Text="Количество в наличии" VerticalAlignment="Center"></TextBlock>
+		<TextBox Grid.Row="10" Grid.Column="1" Text="{Binding QuantityInStock, Mode=TwoWay}"></TextBox>
+
+		<StackPanel Grid.Row="12" Grid.Column="1" Orientation="Horizontal" Spacing="10"
+					HorizontalAlignment="Right" VerticalAlignment="Bottom">
+			<Button Content="Сохранить"></Button>
+			<Button Content="Назад"></Button>
+		</StackPanel>
+		
+	</Grid>
+</UserControl>

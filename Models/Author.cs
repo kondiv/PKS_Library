@@ -16,4 +16,13 @@ public partial class Author
     public string Country { get; set; } = null!;
 
     public virtual ICollection<Book> Books { get; set; } = new List<Book>();
+
+    public string ShortName => $"{LastName} {FirstName[0]}.";
+
+    public string FullName => $"{FirstName} {LastName}";
+
+    public override string ToString()
+    {
+        return FullName;
+    }
 }
