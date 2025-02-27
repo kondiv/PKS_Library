@@ -37,7 +37,6 @@ namespace PKS_Library.ViewModels
            LoadBooksAsync().ConfigureAwait(false);
         }
 
-        [RelayCommand]
         private async Task LoadBooksAsync()
         {
             var allBooks = await _bookService.GetAllBooksAsync();
