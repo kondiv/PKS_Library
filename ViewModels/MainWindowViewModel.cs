@@ -7,10 +7,10 @@ namespace PKS_Library.ViewModels
 {
     public partial class MainWindowViewModel : ViewModelBase
     {
-        private readonly PageViewModelFactory _factory;
-
         [ObservableProperty]
         private NavigationService _navigationService;
+
+        private readonly PageViewModelFactory _pageViewModelFactory;
 
         //Конструктор только для preview
         public MainWindowViewModel()
@@ -18,10 +18,10 @@ namespace PKS_Library.ViewModels
             
         }
 
-        public MainWindowViewModel(NavigationService navigationService, PageViewModelFactory pageFactory)
+        public MainWindowViewModel(NavigationService navigationService, PageViewModelFactory factory)
         {
             _navigationService = navigationService;
-            _factory = pageFactory;
+            _pageViewModelFactory = factory;
 
             GoToBooksPage();
         }
@@ -29,7 +29,7 @@ namespace PKS_Library.ViewModels
         [RelayCommand]
         public void GoToBooksPage()
         {
-            var booksPage = _factory.GetPageViewModel(Data.PageName.Books);
+            var booksPage = _pageViewModelFactory.GetPageViewModel(Data.PageName.Books);
 
             NavigationService.NavigateTo(booksPage);
         }
@@ -37,7 +37,7 @@ namespace PKS_Library.ViewModels
         [RelayCommand]
         public void GoToAuthorsPage()
         {
-            var authorsPage = _factory.GetPageViewModel(Data.PageName.Authors);
+            var authorsPage = _pageViewModelFactory.GetPageViewModel(Data.PageName.Authors);    
 
             NavigationService.NavigateTo(authorsPage);
         }
@@ -45,7 +45,7 @@ namespace PKS_Library.ViewModels
         [RelayCommand]
         public void GoToGenresPage()
         {
-            var genresPage = _factory.GetPageViewModel(Data.PageName.Genres);
+            var genresPage = _pageViewModelFactory.GetPageViewModel(Data.PageName.Genres);
 
             NavigationService.NavigateTo(genresPage);
         }

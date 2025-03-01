@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:PKS_Library.ViewModels;assembly=PKS_Library"
 			 xmlns:models="clr-namespace:PKS_Library.Models;assembly=PKS_Library"
-			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 mc:Ignorable="d" d:DesignWidth="750" d:DesignHeight="400"
              x:Class="PKS_Library.Views.AllBooksView"
 			 x:DataType="vm:AllBooksViewModel">
 	
@@ -15,26 +15,35 @@
 			<TextBlock Text="Жанр" Grid.Column="2" FontWeight="Bold" Margin="10, 0"/>
 			<TextBlock Text="Кол-во" Grid.Column="3" FontWeight="Bold" Margin="10, 0"/>
 		</Grid>
-		<ListBox ItemsSource="{Binding Books}">
-			<ListBox.ItemTemplate>
-				<DataTemplate>
-					<Grid ColumnDefinitions="220, 160, 180, 80, 55, 55"
-							Margin="0">
-						<TextBlock Text="{Binding Title}" Grid.Column="0"/>
-						<TextBlock Text="{Binding Author.ShortName}" Grid.Column="1"/>
-						<TextBlock Text="{Binding Genre}" Grid.Column="2"/>
-						<TextBlock Text="{Binding QuantityInStock}" Grid.Column="3"/>
-						<Button Grid.Column="4"
-								Command="{Binding $parent[ListBox].((vm:AllBooksViewModel)DataContext).OpenEditBookPageCommand}"
-								CommandParameter="{Binding .}">
-							<PathIcon Data="{StaticResource EditIcon}" Foreground="Blue"></PathIcon>
-						</Button>
-						<Button Grid.Column="5">
-							<PathIcon Data="{StaticResource DeleteIcon}" Foreground="Red"></PathIcon>
-						</Button>
-					</Grid>
-				</DataTemplate>
-			</ListBox.ItemTemplate>
-		</ListBox>
+		<ScrollViewer Height="350">
+			<ListBox ItemsSource="{Binding Books}">
+				<ListBox.ItemTemplate>
+					<DataTemplate>
+						<Grid ColumnDefinitions="220, 160, 180, 80, 55, 55"
+								Margin="0">
+							<TextBlock Text="{Binding Title}" Grid.Column="0"/>
+							<TextBlock Text="{Binding Author.ShortName}" Grid.Column="1"/>
+							<TextBlock Text="{Binding Genre}" Grid.Column="2"/>
+							<TextBlock Text="{Binding QuantityInStock}" Grid.Column="3"/>
+							<Button Grid.Column="4"
+									Command="{Binding $parent[ListBox].((vm:AllBooksViewModel)DataContext).OpenEditBookPageCommand}"
+									CommandParameter="{Binding .}">
+								<PathIcon Data="{StaticResource EditIcon}" Foreground="Blue"></PathIcon>
+							</Button>
+							<Button Grid.Column="5">
+								<PathIcon Data="{StaticResource DeleteIcon}" Foreground="Red"></PathIcon>
+							</Button>
+						</Grid>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+			</ListBox>
+		</ScrollViewer>
+		<Button>
+			<StackPanel Orientation="Horizontal" Spacing="10">
+				<PathIcon Data="{StaticResource AddIcon}" Foreground="Green"></PathIcon>
+				<TextBlock Text="Добавить книгу"></TextBlock>
+			</StackPanel>
+		</Button>
+
 	</StackPanel>
 </UserControl>

@@ -1,7 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using PKS_Library.Factories;
 using PKS_Library.Models;
 using PKS_Library.Services.Interfaces;
+using PKS_Library.Services.Realisations;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,6 +21,10 @@ namespace PKS_Library.ViewModels
         private readonly IAuthorService _authorService;
 
         private readonly IGenreService _genreService;
+
+        private readonly NavigationService _navigationService;
+
+        private readonly PageViewModelFactory _factory;
 
         [ObservableProperty]
         private Book _selectedBook = new();
@@ -47,12 +53,15 @@ namespace PKS_Library.ViewModels
         [ObservableProperty]
         private ObservableCollection<Genre> _genres = [];
 
-        public BookEditViewModel(IBookService bookService, IAuthorService authorService, IGenreService genreService)
+        public BookEditViewModel(IBookService bookService, IAuthorService authorService, IGenreService genreService, NavigationService navigationService, PageViewModelFactory factory)
         {
-            PageName       = Data.PageName.BookEdit;
-            _bookService   = bookService;
-            _authorService = authorService;
-            _genreService  = genreService;
+            PageName = Data.PageName.BookEdit;
+
+            _bookService       = bookService;
+            _authorService     = authorService;
+            _genreService      = genreService;
+            _navigationService = navigationService;
+            _factory           = factory;
 
             LoadDataAsync().ConfigureAwait(false);
         }
@@ -70,13 +79,18 @@ namespace PKS_Library.ViewModels
         {
             SelectedBook = book;
 
-            Title = book.Title;
+            Title           = book.Title;
             QuantityInStock = book.QuantityInStock;
-            Isbn = book.Isbn;
-            PublishYear = book.PublishYear;
-            Author = book.Author;
-            Genre = book.Genre;
+            Isbn            = book.Isbn;
+            PublishYear     = book.PublishYear;
+            Author          = book.Author;
+            Genre           = book.Genre;
         }
 
+        [RelayCommand]
+        public void GoToBooksPage()
+        {
+            _navigationService.NavigateTo(_factory.GetPageViewModel(Data.PageName.Books));
+        }
     }
 }
