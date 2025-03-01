@@ -41,15 +41,18 @@ namespace PKS_Library
                       .AddSingleton<IGenreService, GenreService>()
                       .AddTransient<AllBooksViewModel>()
                       .AddTransient<BookEditViewModel>()
-                      .AddSingleton<AllBooksView>()
                       .AddTransient<AllAuthorsViewModel>()
+                      .AddTransient<AuthorEditViewModel>()
                       .AddTransient<AllGenresViewModel>()
+                      .AddTransient<GenreEditViewModel>()
                       .AddSingleton<Func<PageName, PageViewModel>>(x => name => name switch
                       {
-                          PageName.Books    => x.GetRequiredService<AllBooksViewModel>(),
-                          PageName.BookEdit => x.GetRequiredService<BookEditViewModel>(),
-                          PageName.Authors  => x.GetRequiredService<AllAuthorsViewModel>(),
-                          PageName.Genres   => x.GetRequiredService<AllGenresViewModel>(),
+                          PageName.Books      => x.GetRequiredService<AllBooksViewModel>(),
+                          PageName.BookEdit   => x.GetRequiredService<BookEditViewModel>(),
+                          PageName.Authors    => x.GetRequiredService<AllAuthorsViewModel>(),
+                          PageName.AuthorEdit => x.GetRequiredService<AuthorEditViewModel>(),
+                          PageName.Genres     => x.GetRequiredService<AllGenresViewModel>(),
+                          PageName.GenreEdit  => x.GetRequiredService<GenreEditViewModel>(),
                           _ => throw new NotImplementedException()
                       })
                       .AddSingleton<PageViewModelFactory>();

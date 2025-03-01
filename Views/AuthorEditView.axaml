@@ -2,7 +2,33 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:vm="clr-namespace:PKS_Library.ViewModels;assembly=PKS_Library"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="PKS_Library.Views.AuthorEditView">
-  Welcome to Avalonia!
+             x:Class="PKS_Library.Views.AuthorEditView"
+			 x:DataType="vm:AuthorEditViewModel">
+	
+	<Grid RowDefinitions="30, 10, 30, 10, 30, 10, 30, 20, 40" ColumnDefinitions="*, Auto"
+			Margin="10" >
+		<TextBlock TextAlignment="Center" Grid.Row="0" Grid.Column="0" Text="Имя автора"
+				   VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
+		<TextBox Grid.Row="0" Grid.Column="1" Width="560" Text="{Binding FirstName}"></TextBox>
+
+		<TextBlock TextAlignment="Center" Grid.Row="2" Grid.Column="0" Text="Фамилия автора"
+				   VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
+		<TextBox Grid.Row="2" Grid.Column="1" Text="{Binding LastName}"></TextBox>
+
+		<TextBlock TextAlignment="Center" Grid.Row="4" Grid.Column="0" Text="Дата рождения"
+				   VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
+		<TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Birthdate}"></TextBox>
+
+		<TextBlock TextAlignment="Center" Grid.Row="6" Grid.Column="0" Text="Страна"
+				   VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
+		<TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Country}"></TextBox>
+
+		<StackPanel Grid.Row="8" Grid.Column="1" Orientation="Horizontal" Spacing="10"
+					HorizontalAlignment="Right" VerticalAlignment="Bottom">
+			<Button Content="Сохранить"></Button>
+			<Button Content="Назад" Command="{Binding GoToAuthorsPageCommand}"></Button>
+		</StackPanel>
+	</Grid>
 </UserControl>

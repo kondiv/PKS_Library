@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using PKS_Library.CustomExceptions;
+using PKS_Library.Factories;
 using PKS_Library.Models;
 using PKS_Library.Services.Interfaces;
 using PKS_Library.Services.Realisations;
@@ -18,15 +20,18 @@ namespace PKS_Library.ViewModels
 
         private readonly NavigationService _navigationService;
 
+        private readonly PageViewModelFactory _factory;
+
         [ObservableProperty]
         private ObservableCollection<Genre> _genres = [];
 
-        public AllGenresViewModel(IGenreService genreService, NavigationService navigationService)
+        public AllGenresViewModel(IGenreService genreService, NavigationService navigationService, PageViewModelFactory factory)
         {
             PageName = Data.PageName.Genres;
 
             _genreService = genreService;
             _navigationService = navigationService;
+            _factory = factory;
 
             LoadGenresAsync().ConfigureAwait(false);
         }
@@ -38,9 +43,14 @@ namespace PKS_Library.ViewModels
         }
 
         [RelayCommand]
-        public void OpenEditGenrePage()
+        public void OpenEditGenrePage(Genre genre)
         {
+            var genreEditPage = _factory.GetPageViewModel(Data.PageName.GenreEdit) as GenreEditViewModel
+                ?? throw new PageDoesNotExistException("Не удалось открыть страницу редактирования жанров");
 
+            genreEditPage.SetGenre(genre);
+
+            _navigationService.NavigateTo(genreEditPage);
         }
     }
 }
