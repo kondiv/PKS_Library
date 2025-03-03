@@ -41,6 +41,7 @@ namespace PKS_Library
                       .AddSingleton<IGenreService, GenreService>()
                       .AddTransient<AllBooksViewModel>()
                       .AddTransient<BookEditViewModel>()
+                      .AddTransient<AddBookViewModel>()
                       .AddTransient<AllAuthorsViewModel>()
                       .AddTransient<AuthorEditViewModel>()
                       .AddTransient<AllGenresViewModel>()
@@ -49,6 +50,7 @@ namespace PKS_Library
                       {
                           PageName.Books      => x.GetRequiredService<AllBooksViewModel>(),
                           PageName.BookEdit   => x.GetRequiredService<BookEditViewModel>(),
+                          PageName.BookAdd    => x.GetRequiredService<AddBookViewModel>(),
                           PageName.Authors    => x.GetRequiredService<AllAuthorsViewModel>(),
                           PageName.AuthorEdit => x.GetRequiredService<AuthorEditViewModel>(),
                           PageName.Genres     => x.GetRequiredService<AllGenresViewModel>(),

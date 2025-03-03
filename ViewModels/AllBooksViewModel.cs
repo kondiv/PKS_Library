@@ -57,5 +57,13 @@ namespace PKS_Library.ViewModels
 
             _navigationService.NavigateTo(editPage);
         }
+
+        [RelayCommand]
+        public void OpenAddBookPage()
+        {
+            var addPage = _pageFactory.GetPageViewModel(Data.PageName.BookAdd);
+
+            _navigationService.NavigateTo(addPage);
+        }
     }
 }
