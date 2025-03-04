@@ -109,6 +109,8 @@ namespace PKS_Library.ViewModels
         [ObservableProperty]
         private string _fatalError = String.Empty;
 
+        private bool _areErrorsExist = false;
+
         [RelayCommand]
         public async Task CreateBook()
         {
@@ -119,6 +121,11 @@ namespace PKS_Library.ViewModels
             {
                 SetErrors(validationResult);
                 return;
+            }
+
+            if(_areErrorsExist)
+            {
+                ClearErrors();
             }
 
             var book = BuildBook();
@@ -137,6 +144,8 @@ namespace PKS_Library.ViewModels
 
         public void SetErrors(FluentValidation.Results.ValidationResult validationResult)
         {
+            _areErrorsExist = true;
+
             ClearErrors();
 
             foreach (var error in validationResult.Errors)
@@ -181,6 +190,7 @@ namespace PKS_Library.ViewModels
             IsbnError            = string.Empty;
             PublishYearError     = string.Empty;
             QuantityInStockError = string.Empty;
+            FatalError           = string.Empty;
         }
 
         private Book BuildBook()

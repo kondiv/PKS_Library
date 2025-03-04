@@ -24,6 +24,9 @@ namespace PKS_Library.ViewModels
 
         private readonly IBookService _bookService;
 
+        [ObservableProperty]
+        private string _infoMessage = string.Empty;
+
         public ObservableCollection<Book> Books { get; private set; } = [];
 
         public AllBooksViewModel(IBookService bookService, PageViewModelFactory pageFactory, NavigationService navigationService)
@@ -41,10 +44,7 @@ namespace PKS_Library.ViewModels
         {
             var allBooks = await _bookService.GetAllBooksAsync();
 
-            foreach (var book in allBooks)
-            {
-                Books.Add(book);
-            }
+            Books = new ObservableCollection<Book>(allBooks);
         }
 
         [RelayCommand]
@@ -64,6 +64,33 @@ namespace PKS_Library.ViewModels
             var addPage = _pageFactory.GetPageViewModel(Data.PageName.BookAdd);
 
             _navigationService.NavigateTo(addPage);
+        }
+
+        [RelayCommand]
+        public async Task DeleteBook(Book book)
+        {
+            int id = book.BookId;
+
+            try
+            {
+                await _bookService.DeleteBookAsync(id);
+                Books.Remove(book);
+                await ShowTemporaryMessage("Книга удалена");
+            }
+
+            catch(NotFoundException ex)
+            {
+                await ShowTemporaryMessage(ex.Message);
+            }
+        }
+
+        private async Task ShowTemporaryMessage(string message)
+        {
+            InfoMessage = message;
+
+            await Task.Delay(1500);
+
+            InfoMessage = string.Empty; 
         }
     }
 }

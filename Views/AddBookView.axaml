@@ -46,7 +46,7 @@
 		<StackPanel Grid.Row="12" Grid.Column="1" Orientation="Horizontal" Spacing="10"
 					HorizontalAlignment="Right" VerticalAlignment="Bottom">
 			<Button Content="Создать" Command="{Binding CreateBookCommand}"></Button>
-			<Button Content="Отмена" Command="{Binding GoToBooksPageCommand}"></Button>
+			<Button Content="Назад" Command="{Binding GoToBooksPageCommand}"></Button>
 		</StackPanel>
 
 		<TextBlock Grid.Row="11" Grid.Column="1" Text="{Binding FatalError}" IsVisible="{Binding FatalError.Length}" Foreground="Red"/>
