@@ -4,14 +4,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:vm="clr-namespace:PKS_Library.ViewModels;assembly=PKS_Library"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="PKS_Library.Views.AuthorEditView"
-			 x:DataType="vm:AuthorEditViewModel">
+             x:Class="PKS_Library.Views.EditAuthorView"
+			 x:DataType="vm:EditAuthorViewModel">
 	
 	<Grid RowDefinitions="30, 10, 30, 10, 30, 10, 30, 20, 40" ColumnDefinitions="*, Auto"
 			Margin="10" >
 		<TextBlock TextAlignment="Center" Grid.Row="0" Grid.Column="0" Text="Имя автора"
 				   VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
 		<TextBox Grid.Row="0" Grid.Column="1" Width="560" Text="{Binding FirstName}"></TextBox>
+		<TextBlock Grid.Row="1" Grid.Column="1" FontSize="8" Foreground="Red" Text="{Binding}"></TextBlock>
 
 		<TextBlock TextAlignment="Center" Grid.Row="2" Grid.Column="0" Text="Фамилия автора"
 				   VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>

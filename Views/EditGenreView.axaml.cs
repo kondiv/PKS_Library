@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace PKS_Library.Views;
 
-public partial class BookEditView : UserControl
+public partial class EditGenreView : UserControl
 {
-    public BookEditView()
+    public EditGenreView()
     {
         InitializeComponent();
     }

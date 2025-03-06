@@ -45,7 +45,7 @@ namespace PKS_Library.ViewModels
         [RelayCommand]
         public void OpenEditGenrePage(Genre genre)
         {
-            var genreEditPage = _factory.GetPageViewModel(Data.PageName.GenreEdit) as GenreEditViewModel
+            var genreEditPage = _factory.GetPageViewModel(Data.PageName.GenreEdit) as EditGenreViewModel
                 ?? throw new PageDoesNotExistException("Не удалось открыть страницу редактирования жанров");
 
             genreEditPage.SetGenre(genre);

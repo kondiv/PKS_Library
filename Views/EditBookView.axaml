@@ -4,21 +4,23 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:vm="clr-namespace:PKS_Library.ViewModels;assembly=PKS_Library"
              mc:Ignorable="d" d:DesignWidth="750" d:DesignHeight="400"
-             x:Class="PKS_Library.Views.BookEditView"
-			 x:DataType="vm:BookEditViewModel">
+             x:Class="PKS_Library.Views.EditBookView"
+			 x:DataType="vm:EditBookViewModel">
 	
-	<Grid RowDefinitions="30, 10, 30, 10, 30, 10, 30, 10, 30, 10, 30, 20, 40" ColumnDefinitions="*, Auto"
+	<Grid RowDefinitions="30, 10, 30, 10, 30, 10, 30, 10, 30, 10, 30, 20, 40, 20" ColumnDefinitions="*, Auto"
 		  Margin="10" >
 		<TextBlock TextAlignment="Center" Grid.Row="0" Grid.Column="0" Text="Название книги"
 				   VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
 		<TextBox Grid.Row="0" Grid.Column="1" Width="560" Text="{Binding Title, Mode=TwoWay}"></TextBox>
-		
+		<TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding TitleError}" Foreground="Red" FontSize="8"/>
+
 		<TextBlock TextAlignment="Center" Grid.Row="2" Grid.Column="0" Text="Автор"
 				   VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
 		<ComboBox Grid.Row="2" Grid.Column="1" Width="560" Height="30"
 				  PlaceholderText="{Binding Author}"
 				  ItemsSource="{Binding Authors}"
 				  SelectedItem="{Binding Author}"></ComboBox>
+		<TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding AuthorError}" Foreground="Red" FontSize="8"/>
 		
 		<TextBlock TextAlignment="Center" Grid.Row="4" Grid.Column="0" Text="Жанр"
 				   VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
@@ -26,24 +28,30 @@
 				  PlaceholderText="{Binding Genre}"
 				  ItemsSource="{Binding Genres}"
 				  SelectedItem="{Binding Genre}"></ComboBox>
+		<TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding GenreError}" Foreground="Red" FontSize="8"/>
 		
 		<TextBlock TextAlignment="Center" Grid.Row="6" Grid.Column="0" Text="ISBN"
 				   VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
 		<TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Isbn, Mode=TwoWay}"></TextBox>
-		 
+		<TextBlock Grid.Row="7" Grid.Column="1" Text="{Binding IsbnError}" Foreground="Red" FontSize="8"/>
+		
 		<TextBlock TextAlignment="Center" Grid.Row="8" Grid.Column="0" Text="Год издательства"
 				   VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
-		<NumericUpDown Grid.Row="8" Grid.Column="1" Value="{Binding PublishYear}"></NumericUpDown>
+		<TextBox Grid.Row="8" Grid.Column="1" Text="{Binding PublishYear, Mode=TwoWay}"></TextBox>
+		<TextBlock Grid.Row="9" Grid.Column="1" Text="{Binding PublishYearError}" Foreground="Red" FontSize="8"/>
 		
 		<TextBlock TextAlignment="Center" Grid.Row="10" Grid.Column="0" Text="Количество в наличии"
 				   VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
 		<TextBox Grid.Row="10" Grid.Column="1" Text="{Binding QuantityInStock, Mode=TwoWay}"></TextBox>
-
+		<TextBlock Grid.Row="11" Grid.Column="1" Text="{Binding QuantityInStockError}" Foreground="Red" FontSize="8"/>
+		
 		<StackPanel Grid.Row="12" Grid.Column="1" Orientation="Horizontal" Spacing="10"
 					HorizontalAlignment="Right" VerticalAlignment="Bottom">
-			<Button Content="Сохранить"></Button>
+			<Button Content="Сохранить" Command="{Binding UpdateBookCommand}"></Button>
 			<Button Content="Назад" Command="{Binding GoToBooksPageCommand}"></Button>
 		</StackPanel>
-		
+
+		<TextBlock Grid.Row="11" Grid.Column="1" Text="{Binding FatalError}" IsVisible="{Binding FatalError.Length}" Foreground="Red"/>
+		<TextBlock Grid.Row="11" Grid.Column="1" Text="{Binding SuccessMessage}" IsVisible="{Binding SuccessMessage.Length}" Foreground="Green"/>
 	</Grid>
 </UserControl>

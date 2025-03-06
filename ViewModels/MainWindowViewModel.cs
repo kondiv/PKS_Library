@@ -8,9 +8,9 @@ namespace PKS_Library.ViewModels
     public partial class MainWindowViewModel : ViewModelBase
     {
         [ObservableProperty]
-        private NavigationService _navigationService;
+        private NavigationService _navigationService = null!;
 
-        private readonly PageViewModelFactory _pageViewModelFactory;
+        private readonly PageViewModelFactory _pageViewModelFactory = null!;
 
         //Конструктор только для preview
         public MainWindowViewModel()

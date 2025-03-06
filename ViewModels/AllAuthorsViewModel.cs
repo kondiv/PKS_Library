@@ -45,12 +45,18 @@ namespace PKS_Library.ViewModels
         [RelayCommand]
         public void OpenEditAuthorPage(Author author)
         {
-            var authorEditPage = _factory.GetPageViewModel(Data.PageName.AuthorEdit) as AuthorEditViewModel ??
+            var authorEditPage = _factory.GetPageViewModel(Data.PageName.AuthorEdit) as EditAuthorViewModel ??
                 throw new PageDoesNotExistException("Не удалось открыть страницу редактирования автора");
 
             authorEditPage.SetAuthor(author);
 
             _navigationService.NavigateTo(authorEditPage);
+        }
+
+        [RelayCommand]
+        private void OpenAddAuthorPage()
+        {
+            _navigationService.NavigateTo(_factory.GetPageViewModel(Data.PageName.AuthorAdd));
         }
     }
 }

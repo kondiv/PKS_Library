@@ -27,7 +27,8 @@ namespace PKS_Library.ViewModels
         [ObservableProperty]
         private string _infoMessage = string.Empty;
 
-        public ObservableCollection<Book> Books { get; private set; } = [];
+        [ObservableProperty]
+        private ObservableCollection<Book> _books = [];
 
         public AllBooksViewModel(IBookService bookService, PageViewModelFactory pageFactory, NavigationService navigationService)
         {
@@ -50,7 +51,7 @@ namespace PKS_Library.ViewModels
         [RelayCommand]
         public void OpenEditBookPage(Book book)
         {
-            var editPage = _pageFactory.GetPageViewModel(Data.PageName.BookEdit) as BookEditViewModel ?? 
+            var editPage = _pageFactory.GetPageViewModel(Data.PageName.BookEdit) as EditBookViewModel ?? 
                 throw new PageDoesNotExistException("Не удалось открыть страницу редактирования книги");
 
             editPage.SetBook(book);
