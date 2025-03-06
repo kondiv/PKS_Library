@@ -48,16 +48,4 @@
       <SubType>Designer</SubType>
     </AvaloniaResource>
   </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Views\EditBookView.axaml.cs">
-      <DependentUpon>EditBookView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\EditAuthorView.axaml.cs">
-      <DependentUpon>EditAuthorView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\EditGenreView.axaml.cs">
-      <DependentUpon>EditGenreView.axaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
 </Project>

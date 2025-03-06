@@ -18,28 +18,10 @@ namespace PKS_Library.Repositories.Realisations
             _dbContext = dbContext;
         }
 
-        public async Task AddAuthorAsync(Author author)
+        public async Task CreateAuthorAsync(Author author)
         {
             await _dbContext.Authors.AddAsync(author);
-
-            try
-            {
-                await _dbContext.SaveChangesAsync();
-            }
-
-            catch (DbUpdateConcurrencyException ex)
-            {
-                throw new Exception("Произошел конфликт при изменении книги.", ex);
-            }
-
-            catch (DbUpdateException ex)
-            {
-                throw new Exception("Произошла ошибка при сохранении изменений.", ex);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Произошла непредвиденная ошибка: {ex.Message}", ex);
-            }
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task DeleteAuthorAsync(int id)

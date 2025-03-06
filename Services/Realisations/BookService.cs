@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PKS_Library.CustomExceptions;
+﻿using PKS_Library.CustomExceptions;
 using PKS_Library.Models;
 using PKS_Library.Repositories.Interfaces;
 using PKS_Library.Services.Interfaces;
@@ -51,29 +50,7 @@ namespace PKS_Library.Services.Realisations
         {
             ArgumentNullException.ThrowIfNull(book);
 
-            try
-            {
-                await _bookRepository.UpdateBookAsync(book);
-            }
-
-            catch (NotFoundException ex)
-            {
-                throw new Exception(ex.Message, ex);
-            }
-
-            catch (DbUpdateConcurrencyException ex)
-            {
-                throw new Exception(ex.Message, ex);
-            }
-
-            catch (DbUpdateException ex)
-            {
-                throw new Exception(ex.Message, ex);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message, ex);
-            }
+            await _bookRepository.UpdateBookAsync(book);
         }
     }
 }

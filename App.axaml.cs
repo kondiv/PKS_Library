@@ -40,25 +40,21 @@ namespace PKS_Library
                       .AddSingleton<IAuthorService, AuthorService>()
                       .AddSingleton<IGenreService, GenreService>()
                       .AddTransient<AllBooksViewModel>()
-                      .AddTransient<EditBookViewModel>()
+                      .AddTransient<BookEditViewModel>()
                       .AddTransient<AddBookViewModel>()
                       .AddTransient<AllAuthorsViewModel>()
-                      .AddTransient<EditAuthorViewModel>()
-                      .AddTransient<AddAuthorViewModel>()
+                      .AddTransient<AuthorEditViewModel>()
                       .AddTransient<AllGenresViewModel>()
-                      .AddTransient<EditGenreViewModel>()
-                      .AddTransient<AddGenreViewModel>()
+                      .AddTransient<GenreEditViewModel>()
                       .AddSingleton<Func<PageName, PageViewModel>>(x => name => name switch
                       {
                           PageName.Books      => x.GetRequiredService<AllBooksViewModel>(),
-                          PageName.BookEdit   => x.GetRequiredService<EditBookViewModel>(),
+                          PageName.BookEdit   => x.GetRequiredService<BookEditViewModel>(),
                           PageName.BookAdd    => x.GetRequiredService<AddBookViewModel>(),
                           PageName.Authors    => x.GetRequiredService<AllAuthorsViewModel>(),
-                          PageName.AuthorEdit => x.GetRequiredService<EditAuthorViewModel>(),
-                          PageName.AuthorAdd  => x.GetRequiredService<AddAuthorViewModel>(),
+                          PageName.AuthorEdit => x.GetRequiredService<AuthorEditViewModel>(),
                           PageName.Genres     => x.GetRequiredService<AllGenresViewModel>(),
-                          PageName.GenreEdit  => x.GetRequiredService<EditGenreViewModel>(),
-                          PageName.GenreAdd   => x.GetRequiredService<AddGenreViewModel>(),
+                          PageName.GenreEdit  => x.GetRequiredService<GenreEditViewModel>(),
                           _ => throw new NotImplementedException()
                       })
                       .AddSingleton<PageViewModelFactory>();

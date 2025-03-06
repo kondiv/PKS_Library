@@ -14,196 +14,197 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PKS_Library.ViewModels;
-
-public partial class AddBookViewModel : PageViewModel
+namespace PKS_Library.ViewModels
 {
-    private readonly IBookService _bookService;
-
-    private readonly IAuthorService _authorService;
-
-    private readonly IGenreService _genreService;
-
-    private readonly NavigationService _navigationService;
-
-    private readonly PageViewModelFactory _pageViewModelFactory;
-
-    public AddBookViewModel(IBookService bookService, IAuthorService authorService, IGenreService genreService, NavigationService navigationService, PageViewModelFactory factory)
+    public partial class AddBookViewModel : PageViewModel
     {
-        PageName = Data.PageName.BookAdd;
+        private readonly IBookService _bookService;
 
-        _bookService          = bookService;
-        _authorService        = authorService;
-        _genreService         = genreService;
-        _navigationService    = navigationService;
-        _pageViewModelFactory = factory;
+        private readonly IAuthorService _authorService;
 
-        LoadDataAync().ConfigureAwait(false);
-    }
+        private readonly IGenreService _genreService;
 
-    [ObservableProperty]
-    private IEnumerable<Author> _authors = [];
+        private readonly NavigationService _navigationService;
 
-    [ObservableProperty]
-    private IEnumerable<Genre> _genres = [];
+        private readonly PageViewModelFactory _pageViewModelFactory;
 
-    private async Task LoadDataAync()
-    {
-        var authors = await _authorService.GetAllAuthorsAsync();
-        Authors = new List<Author>(authors);
-
-        var genres = await _genreService.GetAllGenresAsync();
-        Genres = new List<Genre>(genres);
-    }
-
-    [RelayCommand]
-    public void GoToBooksPage()
-    {
-        var booksPage = _pageViewModelFactory.GetPageViewModel(Data.PageName.Books);
-
-        _navigationService.NavigateTo(booksPage);
-    }
-
-    //Сообщение о добавлении книги
-    [ObservableProperty]
-    private string _successMessage = String.Empty;
-
-    //Поля
-    [ObservableProperty]
-    private string _title = String.Empty;
-
-    [ObservableProperty]
-    private Author _author = null!;
-
-    [ObservableProperty]
-    private Genre _genre = null!;
-    
-    [ObservableProperty]
-    private string _isbn = String.Empty;
-
-    [ObservableProperty]
-    private string _publishYear = String.Empty;
-
-    [ObservableProperty]
-    private string _quantityInStock = String.Empty;
-
-    //Ошибки
-    [ObservableProperty]
-    private string _titleError = String.Empty;
-
-    [ObservableProperty]
-    private string _authorError = String.Empty;
-
-    [ObservableProperty]
-    private string _genreError = String.Empty;
-
-    [ObservableProperty]
-    private string _isbnError = String.Empty;
-
-    [ObservableProperty]
-    private string _publishYearError = String.Empty;
-
-    [ObservableProperty]
-    private string _quantityInStockError = String.Empty;
-
-    [ObservableProperty]
-    private string _fatalError = String.Empty;
-
-    private bool _areErrorsExist = false;
-
-    [RelayCommand]
-    public async Task CreateBook()
-    {
-        var validator = new BookPageValidator();
-        var validationResult = validator.Validate(new Data.BookValidationRequest(Title, Author, Genre, Isbn, PublishYear, QuantityInStock));
-
-        if (!validationResult.IsValid)
+        public AddBookViewModel(IBookService bookService, IAuthorService authorService, IGenreService genreService, NavigationService navigationService, PageViewModelFactory factory)
         {
-            SetErrors(validationResult);
-            return;
+            PageName = Data.PageName.BookAdd;
+
+            _bookService          = bookService;
+            _authorService        = authorService;
+            _genreService         = genreService;
+            _navigationService    = navigationService;
+            _pageViewModelFactory = factory;
+
+            LoadDataAync().ConfigureAwait(false);
         }
 
-        if(_areErrorsExist)
+        [ObservableProperty]
+        private List<Author> _authors = [];
+
+        [ObservableProperty]
+        private List<Genre> _genres = [];
+
+        private async Task LoadDataAync()
         {
-            ClearErrors();
+            var authors = await _authorService.GetAllAuthorsAsync();
+            Authors = new List<Author>(authors);
+
+            var genres = await _genreService.GetAllGenresAsync();
+            Genres = new List<Genre>(genres);
         }
 
-        var book = BuildBook();
-
-        try
+        [RelayCommand]
+        public void GoToBooksPage()
         {
-            await _bookService.AddBookAsync(book);
-            SuccessMessage = "Книга добавлена";
+            var booksPage = _pageViewModelFactory.GetPageViewModel(Data.PageName.Books);
+
+            _navigationService.NavigateTo(booksPage);
         }
 
-        catch(AlreadyExistsException ex)
+        //Сообщение о добавлении книги
+        [ObservableProperty]
+        private string _successMessage = String.Empty;
+
+        //Поля
+        [ObservableProperty]
+        private string _title = String.Empty;
+
+        [ObservableProperty]
+        private Author _author = null!;
+
+        [ObservableProperty]
+        private Genre _genre = null!;
+        
+        [ObservableProperty]
+        private string _isbn = String.Empty;
+
+        [ObservableProperty]
+        private string _publishYear = String.Empty;
+
+        [ObservableProperty]
+        private string _quantityInStock = String.Empty;
+
+        //Ошибки
+        [ObservableProperty]
+        private string _titleError = String.Empty;
+
+        [ObservableProperty]
+        private string _authorError = String.Empty;
+
+        [ObservableProperty]
+        private string _genreError = String.Empty;
+
+        [ObservableProperty]
+        private string _isbnError = String.Empty;
+
+        [ObservableProperty]
+        private string _publishYearError = String.Empty;
+
+        [ObservableProperty]
+        private string _quantityInStockError = String.Empty;
+
+        [ObservableProperty]
+        private string _fatalError = String.Empty;
+
+        private bool _areErrorsExist = false;
+
+        [RelayCommand]
+        public async Task CreateBook()
         {
-            FatalError = ex.Message;
-        }
-    }
+            var validator = new BookPageValidator();
+            var validationResult = validator.Validate(new Data.BookValidationRequest(Title, Author, Genre, Isbn, PublishYear, QuantityInStock));
 
-    public void SetErrors(FluentValidation.Results.ValidationResult validationResult)
-    {
-        _areErrorsExist = true;
-
-        ClearErrors();
-
-        foreach (var error in validationResult.Errors)
-        {
-            switch (error.PropertyName)
+            if (!validationResult.IsValid)
             {
-                case nameof(Title):
-                    TitleError = error.ErrorMessage;
-                    break;
+                SetErrors(validationResult);
+                return;
+            }
 
-                case nameof(Author):
-                    AuthorError = error.ErrorMessage;
-                    break;
+            if(_areErrorsExist)
+            {
+                ClearErrors();
+            }
 
-                case nameof(Genre):
-                    GenreError = error.ErrorMessage;
-                    break;
+            var book = BuildBook();
 
-                case nameof(Isbn):
-                    IsbnError = error.ErrorMessage;
-                    break;
+            try
+            {
+                await _bookService.AddBookAsync(book);
+                SuccessMessage = "Книга добавлена";
+            }
 
-                case nameof(PublishYear):
-                    PublishYearError = error.ErrorMessage;
-                    break;
-
-                case nameof(QuantityInStock):
-                    QuantityInStockError = error.ErrorMessage;
-                    break;
-
-                default:
-                    break;
+            catch(AlreadyExistsException ex)
+            {
+                FatalError = ex.Message;
             }
         }
-    }
 
-    private void ClearErrors()
-    {
-        TitleError           = string.Empty;
-        AuthorError          = string.Empty;
-        GenreError           = string.Empty;
-        IsbnError            = string.Empty;
-        PublishYearError     = string.Empty;
-        QuantityInStockError = string.Empty;
-        FatalError           = string.Empty;
-    }
+        public void SetErrors(FluentValidation.Results.ValidationResult validationResult)
+        {
+            _areErrorsExist = true;
 
-    private Book BuildBook()
-    {
-        var bookBuilder = new BookBuilder();
+            ClearErrors();
 
-        bookBuilder.SetTitle(Title)
-            .SetAuthor(Author)
-            .SetGenre(Genre)
-            .SetIsbn(Isbn)
-            .SetPublishYear(int.Parse(PublishYear))
-            .SetQuantityInStock(int.Parse(QuantityInStock));
+            foreach (var error in validationResult.Errors)
+            {
+                switch (error.PropertyName)
+                {
+                    case nameof(Title):
+                        TitleError = error.ErrorMessage;
+                        break;
 
-        return bookBuilder.Build();
+                    case nameof(Author):
+                        AuthorError = error.ErrorMessage;
+                        break;
+
+                    case nameof(Genre):
+                        GenreError = error.ErrorMessage;
+                        break;
+
+                    case nameof(Isbn):
+                        IsbnError = error.ErrorMessage;
+                        break;
+
+                    case nameof(PublishYear):
+                        PublishYearError = error.ErrorMessage;
+                        break;
+
+                    case nameof(QuantityInStock):
+                        QuantityInStockError = error.ErrorMessage;
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        }
+
+        private void ClearErrors()
+        {
+            TitleError           = string.Empty;
+            AuthorError          = string.Empty;
+            GenreError           = string.Empty;
+            IsbnError            = string.Empty;
+            PublishYearError     = string.Empty;
+            QuantityInStockError = string.Empty;
+            FatalError           = string.Empty;
+        }
+
+        private Book BuildBook()
+        {
+            var bookBuilder = new BookBuilder();
+
+            bookBuilder.SetTitle(Title)
+                .SetAuthor(Author)
+                .SetGenre(Genre)
+                .SetIsbn(Isbn)
+                .SetPublishYear(int.Parse(PublishYear))
+                .SetQuantityInStock(int.Parse(QuantityInStock));
+
+            return bookBuilder.Build();
+        }
     }
 }

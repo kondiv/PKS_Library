@@ -38,7 +38,7 @@
 				</ListBox.ItemTemplate>
 			</ListBox>
 		</ScrollViewer>
-		<Button Command="{Binding OpenAddAuthorPageCommand}">
+		<Button>
 			<StackPanel Orientation="Horizontal" Spacing="10">
 				<PathIcon Data="{StaticResource AddIcon}" Foreground="Green"></PathIcon>
 				<TextBlock Text="Добавить автора"></TextBlock>

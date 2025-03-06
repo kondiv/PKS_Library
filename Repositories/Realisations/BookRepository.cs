@@ -7,82 +7,60 @@ using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
-using PKS_Library.CustomExceptions;
 
-namespace PKS_Library.Repositories.Realisations;
-
-public class BookRepository : IBookRepository
+namespace PKS_Library.Repositories.Realisations
 {
-    private readonly PksBooksContext _dbContext;
-
-    public BookRepository(PksBooksContext dbContext)
+    public class BookRepository : IBookRepository
     {
-        _dbContext = dbContext;
-    }
+        private readonly PksBooksContext _dbContext;
 
-    public async Task CreateBookAsync(Book book)
-    {
-        await _dbContext.AddAsync(book);
-
-        await _dbContext.SaveChangesAsync();
-    }
-
-    public async Task DeleteBookAsync(int id)
-    {
-        var book = await GetBookByIdAsync(id);
-
-        if(book != null)
+        public BookRepository(PksBooksContext dbContext)
         {
-            _dbContext.Books.Remove(book);
+            _dbContext = dbContext;
+        }
+
+        public async Task CreateBookAsync(Book book)
+        {
+            await _dbContext.AddAsync(book);
 
             await _dbContext.SaveChangesAsync();
         }
-    }
 
-    public async Task<IEnumerable<Book>> GetAllBooksAsync()
-    {
-        return await _dbContext.Books
-                                .Include(b => b.Author)
-                                .Include(b => b.Genre)
-                                .ToListAsync();
-    }
-
-    public async Task<Book?> GetBookByIdAsync(int id)
-    {
-        return await _dbContext.Books.FindAsync(id);
-    }
-
-    public async Task<Book?> GetBookByIsbnAsync(string isbn)
-    {
-        return await _dbContext.Books.FirstOrDefaultAsync(b => b.Isbn == isbn);
-    }
-
-    public async Task UpdateBookAsync(Book book)
-    {
-        ArgumentNullException.ThrowIfNull(book);
-
-        var existingBook = await GetBookByIdAsync(book.BookId) ?? 
-            throw new NotFoundException($"Книга с ID {book.BookId} не найдена");
-
-        _dbContext.Entry(existingBook).CurrentValues.SetValues(book);
-
-        try
+        public async Task DeleteBookAsync(int id)
         {
+            var book = await GetBookByIdAsync(id);
+
+            if(book != null)
+            {
+                _dbContext.Books.Remove(book);
+
+                await _dbContext.SaveChangesAsync();
+            }
+        }
+
+        public async Task<IEnumerable<Book>> GetAllBooksAsync()
+        {
+            return await _dbContext.Books
+                                    .Include(b => b.Author)
+                                    .Include(b => b.Genre)
+                                    .ToListAsync();
+        }
+
+        public async Task<Book?> GetBookByIdAsync(int id)
+        {
+            return await _dbContext.Books.FindAsync(id);
+        }
+
+        public async Task<Book?> GetBookByIsbnAsync(string isbn)
+        {
+            return await _dbContext.Books.FirstOrDefaultAsync(b => b.Isbn == isbn);
+        }
+
+        public async Task UpdateBookAsync(Book book)
+        {
+            _dbContext.Books.Update(book);
+
             await _dbContext.SaveChangesAsync();
-        }
-
-        catch(DbUpdateConcurrencyException ex)
-        {
-            throw new DbUpdateConcurrencyException("Произошел конфликт при изменении книги.", ex);
-        }
-
-        catch(DbUpdateException ex)
-        {
-            throw new DbUpdateException("Произошла ошибка при сохранении изменений.", ex);
-        }
-        catch(Exception ex)
-        {
-            throw new Exception("Произошла непредвиденная ошибка", ex);
         }
     }
 }

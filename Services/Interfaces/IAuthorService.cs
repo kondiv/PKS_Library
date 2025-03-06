@@ -17,7 +17,7 @@ namespace PKS_Library.Services.Interfaces
 
         Task<Author> GetAuthorByIdAsync(int id);
 
-        Task AddAuthorAsync(Author author);
+        Task CreateAuthorAsync(Author author);
 
         Task UpdateAuthorAsync(Author author);
 

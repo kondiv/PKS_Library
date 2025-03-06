@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace PKS_Library.ViewModels
 {
-    public partial class EditGenreViewModel : PageViewModel
+    public partial class GenreEditViewModel : PageViewModel
     {
         private readonly IGenreService _genreService;
 
@@ -28,7 +28,7 @@ namespace PKS_Library.ViewModels
         [ObservableProperty]
         private string? _description;
 
-        public EditGenreViewModel(IGenreService genreService, NavigationService navigationService, PageViewModelFactory factory)
+        public GenreEditViewModel(IGenreService genreService, NavigationService navigationService, PageViewModelFactory factory)
         {
             PageName = Data.PageName.GenreEdit;
 

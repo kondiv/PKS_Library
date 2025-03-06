@@ -4,8 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:vm="clr-namespace:PKS_Library.ViewModels;assembly=PKS_Library"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="PKS_Library.Views.EditGenreView"
-			 x:DataType="vm:EditGenreViewModel">
+             x:Class="PKS_Library.Views.GenreEditView"
+			 x:DataType="vm:GenreEditViewModel">
 	
 	<Grid RowDefinitions="30, 10, Auto, 20, 40" ColumnDefinitions="*, Auto"
 	Margin="10">
