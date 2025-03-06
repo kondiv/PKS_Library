@@ -17,7 +17,7 @@ namespace PKS_Library.Repositories.Interfaces
 
         Task<Author?> GetAuthorByFirstAndLastNameAsync(string firstName, string lastName);
 
-        Task CreateAuthorAsync(Author author);
+        Task AddAuthorAsync(Author author);
 
         Task UpdateAuthorAsync(Author author);
 

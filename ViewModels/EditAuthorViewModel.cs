@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace PKS_Library.ViewModels
 {
-    public partial class AuthorEditViewModel : PageViewModel
+    public partial class EditAuthorViewModel : PageViewModel
     {
         private readonly IAuthorService _authorService;
 
@@ -20,21 +20,40 @@ namespace PKS_Library.ViewModels
 
         private readonly PageViewModelFactory _factory;
 
-        private Author? _author;
+        private Author _selectedAuthor = new();
+
+        #region Поля формы
+        [ObservableProperty]
+        private string _firstName = string.Empty;
 
         [ObservableProperty]
-        private string? _firstName;
+        private string _lastName = string.Empty;
 
         [ObservableProperty]
-        private string? _lastName;
+        private string _birthdate = string.Empty;
 
         [ObservableProperty]
-        private DateOnly? _birthdate;
+        private string _country = string.Empty;
+        #endregion
+
+        #region Ошибки
+        [ObservableProperty]
+        private string _firstNameError = string.Empty;
 
         [ObservableProperty]
-        private string? _country;
+        private string _lastNameError = string.Empty;
 
-        public AuthorEditViewModel(IAuthorService authorService, NavigationService navigationService, PageViewModelFactory factory)
+        [ObservableProperty]
+        private string _birthdateError = string.Empty;
+
+        [ObservableProperty]
+        private string _countryError = string.Empty;
+
+        [ObservableProperty]
+        private string _fatalError = string.Empty;
+        #endregion
+
+        public EditAuthorViewModel(IAuthorService authorService, NavigationService navigationService, PageViewModelFactory factory)
         {
             PageName = Data.PageName.AuthorEdit;
 
@@ -45,11 +64,11 @@ namespace PKS_Library.ViewModels
 
         public void SetAuthor(Author author)
         {
-            _author = author;
+            _selectedAuthor = author;
 
             FirstName = author.FirstName;
             LastName  = author.LastName;
-            Birthdate = author.Birthdate;
+            Birthdate = author.Birthdate.ToString();
             Country   = author.Country;
         }
 

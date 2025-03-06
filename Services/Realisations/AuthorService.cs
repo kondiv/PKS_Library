@@ -1,4 +1,5 @@
-﻿using PKS_Library.CustomExceptions;
+﻿using Microsoft.EntityFrameworkCore;
+using PKS_Library.CustomExceptions;
 using PKS_Library.Models;
 using PKS_Library.Repositories.Interfaces;
 using PKS_Library.Services.Interfaces;
@@ -19,19 +20,36 @@ namespace PKS_Library.Services.Realisations
             _repository = repository;
         }
 
-        public async Task CreateAuthorAsync(Author author)
+        public async Task AddAuthorAsync(Author author)
         {
             ArgumentNullException.ThrowIfNull(author);
 
             var existingAuthor =  await _repository.GetAuthorByFirstAndLastNameAsync(author.FirstName, author.LastName);
 
-            if(existingAuthor != null && existingAuthor.Birthdate == author.Birthdate && existingAuthor.Country == author.Country)
+            if(existingAuthor != null 
+                && existingAuthor.Birthdate == author.Birthdate 
+                && existingAuthor.Country == author.Country)
             {
                 throw new AlreadyExistsException("Данный автор уже существует");
-            }    
+            }
 
-            await _repository.CreateAuthorAsync(author);
+            try
+            {
+                await _repository.AddAuthorAsync(author);
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
 
+            catch (DbUpdateException ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
         }
 
         public async Task DeleteAuthorAsync(int id)
