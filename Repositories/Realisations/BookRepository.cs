@@ -59,7 +59,10 @@ public class BookRepository : IBookRepository
 
     public IQueryable<Book> GetBooksQuery()
     {
-        return _dbContext.Books.AsNoTracking();
+        return _dbContext.Books
+            .Include(b => b.Author)
+            .Include(b => b.Genre)
+            .AsNoTracking();
     }
 
     public async Task UpdateBookAsync(Book book)

@@ -67,22 +67,22 @@ public class BookService : IBookService
             switch(bookSortBy)
             {
                 case BookSortBy.Title:
-                    query.OrderBy(b => b.Title);
+                    query = query.OrderBy(b => b.Title);
                     break;
                 case BookSortBy.TitleDescending:
-                    query.OrderByDescending(b => b.Title);
+                    query = query.OrderByDescending(b => b.Title);
                     break;
                 case BookSortBy.Author:
-                    query.OrderBy(b => b.Author.LastName);
+                    query = query.OrderBy(b => b.Author.LastName);
                     break;
                 case BookSortBy.AuthorDescending:
-                    query.OrderByDescending(b => b.Author.LastName);
+                    query = query.OrderByDescending(b => b.Author.LastName);
                     break;
                 case BookSortBy.Genre:
-                    query.OrderBy(b => b.Genre.Name);
+                     query = query.OrderBy(b => b.Genre.Name);
                     break;
                 case BookSortBy.GenreDescending:
-                    query.OrderByDescending(b => b.Genre.Name);
+                    query = query.OrderByDescending(b => b.Genre.Name);
                     break;
             }
         }

@@ -9,6 +9,22 @@
 			 x:DataType="vm:AllBooksViewModel">
 	
 	<StackPanel>
+		<Button Content="Фильтры и сортировка" Command="{Binding ShowFiltersCommand}"></Button>
+		<Border Height="40" Margin="0, 10" IsVisible="{Binding IsFilterVisible}">
+			<StackPanel Orientation="Horizontal" Spacing="10">
+				<ComboBox Width="150" PlaceholderText="Автор"
+						  ItemsSource="{Binding Authors}"
+						  SelectedItem="{Binding AuthorFilter}"></ComboBox>
+				<ComboBox Width="150" PlaceholderText="Жанр"
+						  ItemsSource="{Binding Genres}"
+						  SelectedItem="{Binding GenreFilter}"></ComboBox>
+				<ComboBox Width="150" PlaceholderText="Сортировка"
+						  ItemsSource="{Binding SortTypes}"
+						  SelectedItem="{Binding BookSortBy}"></ComboBox>
+				<Button Content="Применить" Command="{Binding ApplyFiltersCommand}"></Button>
+				<Button Content="Сбросить" Command="{Binding ClearFiltersCommand}"></Button>
+			</StackPanel>
+		</Border>
 		<Grid Margin="0" Background="LightGray" ColumnDefinitions="220, 160, 180, 80, 55, 55">
 			<TextBlock Text="Название" Grid.Column="0" FontWeight="Bold" Margin="10, 0"/>
 			<TextBlock Text="Автор" Grid.Column="1" FontWeight="Bold" Margin="10, 0"/>
