@@ -4,80 +4,154 @@ using PKS_Library.Factories;
 using PKS_Library.Models;
 using PKS_Library.Services.Interfaces;
 using PKS_Library.Services.Realisations;
+using PKS_Library.Validators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PKS_Library.ViewModels
+namespace PKS_Library.ViewModels;
+
+public partial class EditAuthorViewModel : PageViewModel
 {
-    public partial class EditAuthorViewModel : PageViewModel
+    private readonly IAuthorService _authorService;
+
+    private readonly NavigationService _navigationService;
+
+    private readonly PageViewModelFactory _factory;
+
+    private Author _selectedAuthor = new();
+
+    #region Поля формы
+    [ObservableProperty]
+    private string _firstName = string.Empty;
+
+    [ObservableProperty]
+    private string _lastName = string.Empty;
+
+    [ObservableProperty]
+    private string _birthdate = string.Empty;
+
+    [ObservableProperty]
+    private string _country = string.Empty;
+    #endregion
+
+    #region Ошибки
+    [ObservableProperty]
+    private string _firstNameError = string.Empty;
+
+    [ObservableProperty]
+    private string _lastNameError = string.Empty;
+
+    [ObservableProperty]
+    private string _birthdateError = string.Empty;
+
+    [ObservableProperty]
+    private string _countryError = string.Empty;
+
+    [ObservableProperty]
+    private string _fatalError = string.Empty;
+
+    private bool _areErrorsExist = false;
+    #endregion
+
+    public EditAuthorViewModel(IAuthorService authorService, NavigationService navigationService, PageViewModelFactory factory)
     {
-        private readonly IAuthorService _authorService;
+        PageName = Data.PageName.AuthorEdit;
 
-        private readonly NavigationService _navigationService;
+        _authorService = authorService;
+        _navigationService = navigationService;
+        _factory = factory;
+    }
 
-        private readonly PageViewModelFactory _factory;
+    public void SetAuthor(Author author)
+    {
+        _selectedAuthor = author;
 
-        private Author _selectedAuthor = new();
+        FirstName = author.FirstName;
+        LastName  = author.LastName;
+        Birthdate = author.Birthdate.ToString();
+        Country   = author.Country;
+    }
 
-        #region Поля формы
-        [ObservableProperty]
-        private string _firstName = string.Empty;
+    [RelayCommand]
+    public void GoToAuthorsPage()
+    {
+        var authorsPage = _factory.GetPageViewModel(Data.PageName.Authors);
 
-        [ObservableProperty]
-        private string _lastName = string.Empty;
+        _navigationService.NavigateTo(authorsPage);
+    }
 
-        [ObservableProperty]
-        private string _birthdate = string.Empty;
+    [ObservableProperty]
+    private string _successMessage = string.Empty;
 
-        [ObservableProperty]
-        private string _country = string.Empty;
-        #endregion
+    [RelayCommand]
+    private async Task UpdateAuthor()
+    {
+        var authorValidator = new AuthorPageValidator();
+        var validationResult = authorValidator.Validate(new Data.AuthorValidationRequest(FirstName, LastName, Birthdate, Country));
 
-        #region Ошибки
-        [ObservableProperty]
-        private string _firstNameError = string.Empty;
-
-        [ObservableProperty]
-        private string _lastNameError = string.Empty;
-
-        [ObservableProperty]
-        private string _birthdateError = string.Empty;
-
-        [ObservableProperty]
-        private string _countryError = string.Empty;
-
-        [ObservableProperty]
-        private string _fatalError = string.Empty;
-        #endregion
-
-        public EditAuthorViewModel(IAuthorService authorService, NavigationService navigationService, PageViewModelFactory factory)
+        if (!validationResult.IsValid)
         {
-            PageName = Data.PageName.AuthorEdit;
-
-            _authorService = authorService;
-            _navigationService = navigationService;
-            _factory = factory;
+            SetErrors(validationResult);
+            return;
         }
 
-        public void SetAuthor(Author author)
+        if(_areErrorsExist)
         {
-            _selectedAuthor = author;
-
-            FirstName = author.FirstName;
-            LastName  = author.LastName;
-            Birthdate = author.Birthdate.ToString();
-            Country   = author.Country;
+            ClearErrors();
         }
 
-        [RelayCommand]
-        public void GoToAuthorsPage()
+        try
         {
-            var authorsPage = _factory.GetPageViewModel(Data.PageName.Authors);
+            _selectedAuthor.FirstName = FirstName;
+            _selectedAuthor.LastName  = LastName;
+            _selectedAuthor.Birthdate = DateOnly.Parse(Birthdate);
+            _selectedAuthor.Country   = Country;
 
-            _navigationService.NavigateTo(authorsPage);
+            await _authorService.UpdateAuthorAsync(_selectedAuthor);
+
+            SuccessMessage = "Данные успешно обновлены";
         }
+        catch (Exception ex)
+        {
+            FatalError = ex.Message;
+        }
+    }
+
+    private void SetErrors(FluentValidation.Results.ValidationResult validationResult)
+    {
+        _areErrorsExist = true;
+        
+        ClearErrors(); 
+
+        foreach (var error in validationResult.Errors)
+        {
+            switch (error.PropertyName)
+            {
+                case nameof(Author.FirstName):
+                    FirstNameError = error.ErrorMessage;
+                    break;
+                case nameof(Author.LastName):
+                    LastNameError = error.ErrorMessage;
+                    break;
+                case nameof(Author.Birthdate):
+                    BirthdateError = error.ErrorMessage;
+                    break;
+                case nameof(Author.Country):
+                    CountryError = error.ErrorMessage;
+                    break;
+            }
+        }
+    }
+
+    private void ClearErrors()
+    {
+        FirstNameError = string.Empty;
+        LastNameError  = string.Empty;
+        BirthdateError = string.Empty;
+        CountryError   = string.Empty;
+        FatalError     = string.Empty;
     }
 }

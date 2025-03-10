@@ -12,17 +12,19 @@
 		<TextBlock TextAlignment="Center" Grid.Row="0" Grid.Column="0" Text="Название жанра"
 				   VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
 		<TextBox Grid.Row="0" Grid.Column="1" Width="560" Text="{Binding Name}"></TextBox>
+		<TextBlock Grid.Row="1" Grid.Column="1" FontSize="8" Foreground="Red" Text="{Binding NameError}"></TextBlock>
 
 		<TextBlock TextAlignment="Center" Grid.Row="2" Grid.Column="0" Text="Описание жанра"
 				   VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
 		<TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Description}" MaxWidth="560"
 				 TextWrapping="Wrap"
 				 MaxLines="10"></TextBox>
+		<TextBlock Grid.Row="3" Grid.Column="1" FontSize="8" Foreground="Red" Text="{Binding DescriptionError}"></TextBlock>
 
 		<StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" Spacing="10"
 					HorizontalAlignment="Right" VerticalAlignment="Bottom">
-			<Button Content="Сохранить"></Button>
-			<Button Content="Назад" Command="{Binding GoToGenresPageCommand}"></Button>
+			<Button Content="Сохранить" Command="{Binding EditGenreCommand}"></Button>
+			<Button Content="Назад" Command="{Binding OpenAllGenresPageCommand}"></Button>
 		</StackPanel>						
 	</Grid>
 </UserControl>

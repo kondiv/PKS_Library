@@ -25,6 +25,9 @@ namespace PKS_Library.ViewModels
         [ObservableProperty]
         private ObservableCollection<Author> _authors = [];
 
+        [ObservableProperty]
+        private string _infoMessage = string.Empty;
+
         public AllAuthorsViewModel(IAuthorService authorService, NavigationService navigationService, PageViewModelFactory factory)
         {
             PageName = Data.PageName.Authors;
@@ -57,6 +60,37 @@ namespace PKS_Library.ViewModels
         private void OpenAddAuthorPage()
         {
             _navigationService.NavigateTo(_factory.GetPageViewModel(Data.PageName.AuthorAdd));
+        }
+
+        [RelayCommand]
+        private async Task DeleteAuthor(Author author)
+        {
+            if (author == null)
+            {
+                await ShowMessage("Автор не выбран");
+                return;
+            }
+
+            try
+            {
+                await _authorService.DeleteAuthorAsync(author.AuthorId);
+                Authors.Remove(author);
+                await ShowMessage("Автор удален");
+            }
+
+            catch (Exception ex)
+            {
+                await ShowMessage(ex.Message);
+            }
+        }
+
+        private async Task ShowMessage(string message)
+        {
+            InfoMessage = message;
+
+            await Task.Delay(1500);
+
+            InfoMessage = string.Empty;
         }
     }
 }

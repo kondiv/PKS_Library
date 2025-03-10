@@ -2,7 +2,29 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:vm="clr-namespace:PKS_Library.ViewModels;assembly=PKS_Library"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="PKS_Library.Views.AddGenreView">
-  Welcome to Avalonia!
+             x:Class="PKS_Library.Views.AddGenreView"
+			 x:DataType="vm:AddGenreViewModel">
+
+	<Grid RowDefinitions="30, 10, Auto, 20, 40" ColumnDefinitions="*, Auto"
+	Margin="10">
+		<TextBlock TextAlignment="Center" Grid.Row="0" Grid.Column="0" Text="Название жанра"
+				   VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
+		<TextBox Grid.Row="0" Grid.Column="1" Width="560" Text="{Binding Name}"></TextBox>
+		<TextBlock Grid.Row="1" Grid.Column="1" FontSize="8" Foreground="Red" Text="{Binding NameError}"></TextBlock>
+
+		<TextBlock TextAlignment="Center" Grid.Row="2" Grid.Column="0" Text="Описание жанра"
+				   VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
+		<TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Description}" MaxWidth="560"
+				 TextWrapping="Wrap"
+				 MaxLines="10"></TextBox>
+		<TextBlock Grid.Row="3" Grid.Column="1" FontSize="8" Foreground="Red" Text="{Binding DescriptionError}"></TextBlock>
+
+		<StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" Spacing="10"
+					HorizontalAlignment="Right" VerticalAlignment="Bottom">
+			<Button Content="Создать" Command="{Binding CreateGenreCommand}"></Button>
+			<Button Content="Назад" Command="{Binding OpenAllGenresPageCommand}"></Button>
+		</StackPanel>
+	</Grid>
 </UserControl>

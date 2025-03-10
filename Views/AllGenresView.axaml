@@ -28,7 +28,9 @@
 									CommandParameter="{Binding .}">
 								<PathIcon Data="{StaticResource EditIcon}" Foreground="Blue"></PathIcon>
 							</Button>
-							<Button Grid.Column="3">
+							<Button Grid.Column="3"
+									Command="{Binding $parent[ListBox].((vm:AllGenresViewModel)DataContext).DeleteGenreCommand}"
+									CommandParameter="{Binding .}">
 								<PathIcon Data="{StaticResource DeleteIcon}" Foreground="Red"></PathIcon>
 							</Button>
 						</Grid>
@@ -36,11 +38,15 @@
 				</ListBox.ItemTemplate>
 			</ListBox>
 		</ScrollViewer>
-		<Button>
-			<StackPanel Orientation="Horizontal" Spacing="10">
-				<PathIcon Data="{StaticResource AddIcon}" Foreground="Green"></PathIcon>
-				<TextBlock Text="Добавить жанр"></TextBlock>
-			</StackPanel>
-		</Button>
+		
+		<Grid ColumnDefinitions="Auto, *">
+			<Button Command="{Binding OpenAddGenrePageCommand}">
+				<StackPanel Orientation="Horizontal" Spacing="10">
+					<PathIcon Data="{StaticResource AddIcon}" Foreground="Green"></PathIcon>
+					<TextBlock Text="Добавить жанр"></TextBlock>
+				</StackPanel>
+			</Button>
+			<TextBlock Grid.Column="1" HorizontalAlignment="Center" Text="{Binding InfoMessage}" Foreground="Red"/>
+		</Grid>
 	</StackPanel>
 </UserControl>

@@ -2,6 +2,7 @@
 using PKS_Library.Models;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace PKS_Library.Repositories.Interfaces
@@ -9,6 +10,8 @@ namespace PKS_Library.Repositories.Interfaces
     public interface IBookRepository
     {
         public Task<IEnumerable<Book>> GetAllBooksAsync();
+
+        IQueryable<Book> GetBooksQuery();
 
         public Task<Book?> GetBookByIdAsync(int id);
 

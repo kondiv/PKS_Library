@@ -52,5 +52,32 @@ namespace PKS_Library.ViewModels
 
             _navigationService.NavigateTo(genreEditPage);
         }
+
+        [RelayCommand]
+        private void OpenAddGenrePage()
+        {
+            var addGenrePage = _factory.GetPageViewModel(Data.PageName.GenreAdd);
+
+            _navigationService.NavigateTo(addGenrePage);
+        }
+
+        [ObservableProperty]
+        private string _infoMessage = string.Empty;
+
+        [RelayCommand]
+        private async Task DeleteGenre(Genre genre)
+        {
+            try
+            {
+                await _genreService.DeleteGenreAsync(genre.GenreId);
+                Genres.Remove(genre);
+                InfoMessage = "Жанр удален";
+            }
+
+            catch (Exception ex)
+            {
+                InfoMessage = ex.Message;
+            }
+        }
     }
 }

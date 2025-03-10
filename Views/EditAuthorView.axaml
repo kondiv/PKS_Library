@@ -12,23 +12,30 @@
 		<TextBlock TextAlignment="Center" Grid.Row="0" Grid.Column="0" Text="Имя автора"
 				   VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
 		<TextBox Grid.Row="0" Grid.Column="1" Width="560" Text="{Binding FirstName}"></TextBox>
-		<TextBlock Grid.Row="1" Grid.Column="1" FontSize="8" Foreground="Red" Text="{Binding}"></TextBlock>
+		<TextBlock Grid.Row="1" Grid.Column="1" FontSize="8" Foreground="Red" Text="{Binding FirstNameError}"></TextBlock>
 
 		<TextBlock TextAlignment="Center" Grid.Row="2" Grid.Column="0" Text="Фамилия автора"
 				   VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
 		<TextBox Grid.Row="2" Grid.Column="1" Text="{Binding LastName}"></TextBox>
+		<TextBlock Grid.Row="3" Grid.Column="1" FontSize="8" Foreground="Red" Text="{Binding LastNameError}"></TextBlock>
 
 		<TextBlock TextAlignment="Center" Grid.Row="4" Grid.Column="0" Text="Дата рождения"
 				   VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
 		<TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Birthdate}"></TextBox>
+		<TextBlock Grid.Row="5" Grid.Column="1" FontSize="8" Foreground="Red" Text="{Binding BirthdateError}"></TextBlock>
 
 		<TextBlock TextAlignment="Center" Grid.Row="6" Grid.Column="0" Text="Страна"
 				   VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
 		<TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Country}"></TextBox>
+		<TextBlock Grid.Row="7" Grid.Column="1" FontSize="8" Foreground="Red" Text="{Binding CountryError}"></TextBlock>
 
+		<TextBlock Grid.Row="7" Grid.Column="1" Text="{Binding FatalError}" IsVisible="{Binding FatalError.Length}" Foreground="Red"/>
+		<TextBlock Grid.Row="7" Grid.Column="1" Text="{Binding SuccessMessage}" IsVisible="{Binding SuccessMessage.Length}" Foreground="Green"/>
+		
 		<StackPanel Grid.Row="8" Grid.Column="1" Orientation="Horizontal" Spacing="10"
 					HorizontalAlignment="Right" VerticalAlignment="Bottom">
-			<Button Content="Сохранить"></Button>
+			<Button Content="Сохранить"
+					Command="{Binding UpdateAuthorCommand}"></Button>
 			<Button Content="Назад" Command="{Binding GoToAuthorsPageCommand}"></Button>
 		</StackPanel>
 	</Grid>

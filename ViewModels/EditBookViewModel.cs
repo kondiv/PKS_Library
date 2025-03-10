@@ -52,9 +52,8 @@ public partial class EditBookViewModel : PageViewModel
     private string _fatalError = String.Empty;
 
     private bool _areErrorsExist = false;
-
+    
     //поля
-    [ObservableProperty]
     private Book _selectedBook = null!;
 
     [ObservableProperty]
@@ -105,7 +104,7 @@ public partial class EditBookViewModel : PageViewModel
 
     public void SetBook(Book book)
     {
-        SelectedBook = book;
+        _selectedBook = book;
 
         Title           = book.Title;
         QuantityInStock = book.QuantityInStock.ToString();
@@ -144,14 +143,14 @@ public partial class EditBookViewModel : PageViewModel
 
         try
         {
-            SelectedBook.Title           = Title;
-            SelectedBook.Author          = Author;
-            SelectedBook.Genre           = Genre;
-            SelectedBook.Isbn            = Isbn;
-            SelectedBook.PublishYear     = int.Parse(PublishYear);
-            SelectedBook.QuantityInStock = int.Parse(QuantityInStock);
+            _selectedBook.Title           = Title;
+            _selectedBook.Author          = Author;
+            _selectedBook.Genre           = Genre;
+            _selectedBook.Isbn            = Isbn;
+            _selectedBook.PublishYear     = int.Parse(PublishYear);
+            _selectedBook.QuantityInStock = int.Parse(QuantityInStock);
 
-            await _bookService.UpdateBookAsync(SelectedBook);
+            await _bookService.UpdateBookAsync(_selectedBook);
 
             SuccessMessage = "Данные книги успешно обновлены";
         }

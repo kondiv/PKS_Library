@@ -54,7 +54,7 @@ namespace PKS_Library.Services.Realisations
 
         public async Task DeleteAuthorAsync(int id)
         {
-            var author = await _repository.GetAuthorByIdAsync(id) ?? throw new NotFoundException("Данного автора не существует");
+            _ = await _repository.GetAuthorByIdAsync(id) ?? throw new NotFoundException("Данного автора не существует");
 
             await _repository.DeleteAuthorAsync(id);
         }
@@ -102,7 +102,14 @@ namespace PKS_Library.Services.Realisations
             if (author == null)
                 throw new WrongArgumentProvidedException("Аргумент не должен быть null");
 
-            await _repository.UpdateAuthorAsync(author);
+            try 
+            {
+                await _repository.UpdateAuthorAsync(author);
+            }
+            catch(Exception)
+            {
+                throw;
+            }
         }
     }
 }

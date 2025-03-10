@@ -57,6 +57,11 @@ public class BookRepository : IBookRepository
         return await _dbContext.Books.FirstOrDefaultAsync(b => b.Isbn == isbn);
     }
 
+    public IQueryable<Book> GetBooksQuery()
+    {
+        return _dbContext.Books.AsNoTracking();
+    }
+
     public async Task UpdateBookAsync(Book book)
     {
         ArgumentNullException.ThrowIfNull(book);
@@ -64,7 +69,7 @@ public class BookRepository : IBookRepository
         var existingBook = await GetBookByIdAsync(book.BookId) ?? 
             throw new NotFoundException($"Книга с ID {book.BookId} не найдена");
 
-        _dbContext.Entry(existingBook).CurrentValues.SetValues(book);
+        _dbContext.Books.Entry(existingBook).CurrentValues.SetValues(book);
 
         try
         {
