@@ -3,9 +3,9 @@
         xmlns:vm="using:PKS_Library.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="500"
 		Width="800"
-		Height="450"
+		Height="500"
         x:Class="PKS_Library.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
@@ -28,7 +28,7 @@
 				<Button Content="Авторы" Command="{Binding GoToAuthorsPageCommand}"></Button>
 				<Button Content="Жанры" Command="{Binding GoToGenresPageCommand}"></Button>
 			</StackPanel>
-			<Border BorderBrush="Black" BorderThickness="1" Width="750" Height="400">
+			<Border BorderBrush="Black" BorderThickness="1" Width="750" Height="440">
 				<ContentControl Content="{Binding NavigationService.CurrentPage}">
 				</ContentControl>
 			</Border>
